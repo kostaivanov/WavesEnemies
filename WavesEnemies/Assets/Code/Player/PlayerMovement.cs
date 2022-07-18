@@ -5,7 +5,7 @@ using UnityEngine;
 internal class PlayerMovement : PlayerComponents
 {
     #region Constants
-    private const float minimumVelocity_X = 1f;
+    private const float minimumVelocity = 1f;
     private const float minimumFallingVelocity_Y = -2f;
     private const float groundCheckRadius = 0.1f;
     #endregion
@@ -32,17 +32,19 @@ internal class PlayerMovement : PlayerComponents
     private void Update()
     {
         ProcessInput();
+        Move();
     }
 
     private void FixedUpdate()
     {
-        Move();
+
     }
 
     private void LateUpdate()
     {
         this.AnimationStateSwitch();
         base.animator.SetInteger("state", (int)state);
+        Animate();
     }
 
     private void ProcessInput()
@@ -65,6 +67,28 @@ internal class PlayerMovement : PlayerComponents
 
     protected void AnimationStateSwitch()
     {
+        if (Input.anyKey)
+        {
+            if (Mathf.Abs(base.rigidBody.velocity.x) > minimumVelocity || Mathf.Abs(base.rigidBody.velocity.y) > minimumVelocity)
+            {
+
+            }
+            state = AnimationState.moving;
+        }
+        else
+        {
+            state = AnimationState.idle;
+        }
+    }
+
+    private void Animate()
+    {
+        animator.SetFloat("MoveX", moveDirection.x);
+        animator.SetFloat("MoveY", moveDirection.y);
+        //animator.SetFloat("AnimMoveMagnitude", moveDirection.magnitude);
+
+        //animator.SetFloat("AnimLastMoveX", lastMoveDirection.x);
+        //animator.SetFloat("AnimLastMoveY", lastMoveDirection.y);
 
     }
 }
