@@ -15,12 +15,12 @@ internal class PlayerMovement : PlayerComponents
     //[SerializeField] private AudioClip shootSound;
 
     [SerializeField] internal float movingSpeed;
-    [SerializeField] internal float jumpHeight;
     //[SerializeField] Transform playerGroundCheck;
     #endregion
 
     private float direction;
-
+    private Vector2 moveDirection;
+    private Vector2 lastMoveDirection;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -31,13 +31,36 @@ internal class PlayerMovement : PlayerComponents
     // Update is called once per frame
     private void Update()
     {
-        
+        ProcessInput();
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
     }
 
     private void LateUpdate()
     {
         this.AnimationStateSwitch();
         base.animator.SetInteger("state", (int)state);
+    }
+
+    private void ProcessInput()
+    {
+        float move_X = Input.GetAxisRaw("Horizontal");
+        float move_Y = Input.GetAxisRaw("Vertical");
+
+        if ((move_X == 0 && move_Y == 0) && moveDirection.x != 0 || moveDirection.y != 0)
+        {
+            lastMoveDirection = moveDirection;
+        }
+
+        moveDirection = new Vector2(move_X, move_Y).normalized;
+    }
+
+    private void Move()
+    {
+        rigidBody.velocity = new Vector2(moveDirection.x * movingSpeed, moveDirection.y * movingSpeed);
     }
 
     protected void AnimationStateSwitch()
