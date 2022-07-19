@@ -15,24 +15,31 @@ internal class PlayerMovement : PlayerComponents
     //[SerializeField] private AudioClip shootSound;
 
     [SerializeField] internal float movingSpeed;
-    //[SerializeField] Transform playerGroundCheck;
     #endregion
 
-    private float direction;
     private Vector2 moveDirection;
     private Vector2 lastMoveDirection;
+    internal bool moveKeyIsPressed;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        moveKeyIsPressed = false;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        ProcessInput();
-        Move();
+        if (Input.anyKey == true)
+        {
+            moveKeyIsPressed = true;
+        }
+        if (moveKeyIsPressed == true)
+        {
+            ProcessInput();
+        }
+
     }
 
     private void FixedUpdate()
@@ -58,6 +65,7 @@ internal class PlayerMovement : PlayerComponents
         }
 
         moveDirection = new Vector2(move_X, move_Y).normalized;
+        Move();
     }
 
     private void Move()
