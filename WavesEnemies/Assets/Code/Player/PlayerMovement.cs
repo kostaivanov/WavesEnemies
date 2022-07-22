@@ -18,6 +18,7 @@ internal class PlayerMovement : PlayerComponents
     #endregion
 
     private Vector2 moveDirection;
+    private Vector3 aim;
     private Vector2 lastMoveDirection;
     internal bool moveKeyIsPressed;
 
@@ -39,7 +40,7 @@ internal class PlayerMovement : PlayerComponents
         {
             ProcessInput();
         }
-
+        //aim = new Vector3(GetAX)
     }
 
     private void FixedUpdate()
