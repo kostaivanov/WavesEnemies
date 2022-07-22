@@ -32,7 +32,7 @@ internal class PlayerMovement : PlayerComponents
     // Update is called once per frame
     private void Update()
     {
-        if (Input.anyKey == true)
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
         {
             moveKeyIsPressed = true;
         }
@@ -67,6 +67,7 @@ internal class PlayerMovement : PlayerComponents
 
         moveDirection = new Vector2(move_X, move_Y).normalized;
         Move();
+        
     }
 
     private void Move()
@@ -80,9 +81,8 @@ internal class PlayerMovement : PlayerComponents
         {
             if (Mathf.Abs(base.rigidBody.velocity.x) > minimumVelocity || Mathf.Abs(base.rigidBody.velocity.y) > minimumVelocity)
             {
-
+                state = AnimationState.moving;
             }
-            state = AnimationState.moving;
         }
         else
         {
