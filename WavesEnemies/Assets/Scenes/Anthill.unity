@@ -493,6 +493,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 22397406}
   bulletPrefab: {fileID: 3644548273803696970, guid: e76c51a5205b7b141bbf939460690a11, type: 3}
+--- !u!1 &602679576
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 602679577}
+  m_Layer: 0
+  m_Name: ObjectChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &602679577
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602679576}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.379123, y: 1.7096113, z: -0.05163786}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &722716000
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,6 +535,8 @@ GameObject:
   - component: {fileID: 722716003}
   - component: {fileID: 722716002}
   - component: {fileID: 722716001}
+  - component: {fileID: 722716005}
+  - component: {fileID: 722716004}
   m_Layer: 0
   m_Name: Land
   m_TagString: Untagged
@@ -598,6 +631,53 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &722716004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 722716000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3876f9023d73e148b7ce1693b6abaee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backGround: {fileID: 722716002}
+  backGroundCollider: {fileID: 722716005}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  objectChecker: {fileID: 602679576}
+--- !u!60 &722716005
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 722716000}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 35, y: 35}
+    newSize: {x: 35, y: 35}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -17.5, y: 17.5}
+      - {x: -17.5, y: -17.5}
+      - {x: 17.5, y: -17.5}
+      - {x: 17.5, y: 17.5}
 --- !u!1 &1880573129
 GameObject:
   m_ObjectHideFlags: 0
