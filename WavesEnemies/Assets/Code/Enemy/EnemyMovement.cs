@@ -368,7 +368,7 @@ internal class EnemyMovement : MonoBehaviour
         {
             BeginSearch();
         }
-        if (Input.GetKeyDown(KeyCode.S) && !done)
+        if (Input.GetKeyDown(KeyCode.L) && !done)
         {
             searching = true;
 
@@ -380,13 +380,13 @@ internal class EnemyMovement : MonoBehaviour
                 Debug.Log(item.F);
             }
         }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            foreach (PathMarker item in open)
-            {
-                Debug.Log(item.F);
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.O))
+        //{
+        //    foreach (PathMarker item in open)
+        //    {
+        //        Debug.Log(item.F);
+        //    }
+        //}
 
         if (searching == true)
         {
@@ -397,7 +397,7 @@ internal class EnemyMovement : MonoBehaviour
         {
             GetPath();
         }
-        if (Input.GetKeyDown(KeyCode.F) && f_Pushed == false)
+        if (Input.GetKeyDown(KeyCode.K) && f_Pushed == false)
         {
             f_Pushed = true;
         }

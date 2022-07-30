@@ -40,7 +40,7 @@ internal class Maze : MonoBehaviour
 
         InitialiseMap();
         MarkTheGround();
-        DrawMap();
+        //DrawMap();
     }
 
     private void InitialiseMap()
@@ -54,7 +54,14 @@ internal class Maze : MonoBehaviour
             }
         }
     }
-
+    private void Update()
+    {
+        Debug.Log(map.Length);
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            DrawMap();
+        }
+    }
     //private void FindMapSpace()
     //{
     //    Collider2D[] overlap = Physics2D.OverlapAreaAll(backGroundCollider.bounds.min, backGroundCollider.bounds.max, groundLayer);
@@ -82,7 +89,7 @@ internal class Maze : MonoBehaviour
 
                     wall.transform.localPosition = new Vector3(1, 1, 1);
                     wall.transform.position = pos;
-                    wall.layer = 9;
+                    wall.layer = 6;
 
                     wallIndexes.Add(new KeyValuePair<float, float>(pos.x, pos.y));
                     wallObjects.Add(wall);
