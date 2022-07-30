@@ -17,8 +17,8 @@ internal class EnemyMovement : MonoBehaviour
     [SerializeField] private GameObject PathParent;
 
 
-    [SerializeField] private GameObject goalObject;
-    [SerializeField] private GameObject startObject;
+    //[SerializeField] private GameObject goalObject;
+    //[SerializeField] private GameObject startObject;
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] internal SpriteRenderer backGround;
 
@@ -28,16 +28,16 @@ internal class EnemyMovement : MonoBehaviour
     private PathMarker lastPosition;
     private bool done = false;
     private bool startMarkerToClosed = false;
-    [SerializeField] protected Rigidbody2D rigidBody;
+    //[SerializeField] protected Rigidbody2D rigidBody;
     [SerializeField] private float speed;
 
-    public List<GameObject> waypoints;
-    int currentWP = 0;
-    public float speedTracker = 1f;
-    public float rotationSpeed = 2f;
+    //public List<GameObject> waypoints;
+    //int currentWP = 0;
+    //public float speedTracker = 1f;
+    //public float rotationSpeed = 2f;
 
-    public float lookAhead = 1f;
-    private GameObject tracker;
+    //public float lookAhead = 1f;
+    //private GameObject tracker;
 
     private float direction_X;
     private float direction_Y;
@@ -50,13 +50,13 @@ internal class EnemyMovement : MonoBehaviour
     void Start()
     {
         searching = false;
-        waypoints = new List<GameObject>();
+       // waypoints = new List<GameObject>();
 
-        tracker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        DestroyImmediate(tracker.GetComponent<Collider2D>());
-        tracker.GetComponent<MeshRenderer>().enabled = false;
-        tracker.transform.position = startObject.transform.position;
-        tracker.transform.rotation = startObject.transform.rotation;
+        //tracker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        //DestroyImmediate(tracker.GetComponent<Collider2D>());
+        //tracker.GetComponent<MeshRenderer>().enabled = false;
+        ///tracker.transform.position = startObject.transform.position;
+        ///tracker.transform.rotation = startObject.transform.rotation;
         f_Pushed = false;
     }
 
@@ -88,15 +88,21 @@ internal class EnemyMovement : MonoBehaviour
             }
         }
 
-
-
-        Vector3 startLocation = new Vector3(startObject.transform.position.x, startObject.transform.position.y, 0);
-        startNode = new PathMarker(new LocationOnTheMap(startObject.transform.position.x, startObject.transform.position.y), 0, 0, 0,
+        Vector3 startLocation = new Vector3(locations[0].x, locations[0].y, 0);
+        startNode = new PathMarker(new LocationOnTheMap(locations[0].x, locations[0].y), 0, 0, 0,
             Instantiate(start, startLocation, transform.rotation * Quaternion.Euler(90f, 0, 0f)), null);
 
-        Vector3 goalLocation = new Vector3(goalObject.transform.position.x, goalObject.transform.position.y, 0);
-        goalNode = new PathMarker(new LocationOnTheMap(goalObject.transform.position.x, goalObject.transform.position.y), 0, 0, 0,
+        Vector3 goalLocation = new Vector3(locations[1].x, locations[1].y, 0);
+        goalNode = new PathMarker(new LocationOnTheMap(locations[1].x, locations[1].y), 0, 0, 0,
             Instantiate(end, goalLocation, transform.rotation * Quaternion.Euler(-90f, 0, 0f)), null);
+
+        //Vector3 startLocation = new Vector3(startObject.transform.position.x, startObject.transform.position.y, 0);
+        //startNode = new PathMarker(new LocationOnTheMap(startObject.transform.position.x, startObject.transform.position.y), 0, 0, 0,
+        //    Instantiate(start, startLocation, transform.rotation * Quaternion.Euler(90f, 0, 0f)), null);
+
+        //Vector3 goalLocation = new Vector3(goalObject.transform.position.x, goalObject.transform.position.y, 0);
+        //goalNode = new PathMarker(new LocationOnTheMap(goalObject.transform.position.x, goalObject.transform.position.y), 0, 0, 0,
+        //    Instantiate(end, goalLocation, transform.rotation * Quaternion.Euler(-90f, 0, 0f)), null);
 
 
         open.Clear();
@@ -114,7 +120,8 @@ internal class EnemyMovement : MonoBehaviour
             done = true;
             return; // the goal has been found
         }
-        float unityDistance = Vector3.Distance(thisNode.location.ToVector(), goalObject.transform.position);
+        ///float unityDistance = Vector3.Distance(thisNode.location.ToVector(), goalObject.transform.position);
+        float unityDistance = Vector3.Distance(thisNode.location.ToVector(), end.transform.position);
         //Debug.Log("distance kva e we = " + unityDistance);
         if (unityDistance < 2f)
         {
@@ -209,22 +216,22 @@ internal class EnemyMovement : MonoBehaviour
 
         lastPosition = pm;
 
-        if (lastPosition.location.x < startObject.transform.position.x)
-        {
-            direction_X = -1f;
-        }
-        if (lastPosition.location.x > startObject.transform.position.x)
-        {
-            direction_X = 1f;
-        }
-        if (lastPosition.location.y < startObject.transform.position.y)
-        {
-            direction_Y = 1f;
-        }
-        if (lastPosition.location.y > startObject.transform.position.y)
-        {
-            direction_Y = -1f;
-        }
+        //if (lastPosition.location.x < startObject.transform.position.x)
+        //{
+        //    direction_X = -1f;
+        //}
+        //if (lastPosition.location.x > startObject.transform.position.x)
+        //{
+        //    direction_X = 1f;
+        //}
+        //if (lastPosition.location.y < startObject.transform.position.y)
+        //{
+        //    direction_Y = 1f;
+        //}
+        //if (lastPosition.location.y > startObject.transform.position.y)
+        //{
+        //    direction_Y = -1f;
+        //}
 
         //rigidBody.velocity = new Vector2(direction_X * speed, rigidBody.velocity.y);
     }
@@ -284,12 +291,12 @@ internal class EnemyMovement : MonoBehaviour
         {
             GameObject pathObject_1 = Instantiate(PathParent, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
             begin = begin.parent;
-            waypoints.Add(pathObject_1);
+            //waypoints.Add(pathObject_1);
         }
 
         GameObject pathObject_2 = Instantiate(PathParent, new Vector3(startNode.location.x, startNode.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
-        waypoints.Add(pathObject_2);
-        currentWP = waypoints.Count - 1;
+        //waypoints.Add(pathObject_2);
+        //currentWP = waypoints.Count - 1;
     }
 
 
@@ -396,44 +403,44 @@ internal class EnemyMovement : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Debug.Log("waypoints bro = " + waypoints.Count);
-            foreach (GameObject item in waypoints)
-            {
-                Debug.Log(item.transform.position);
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    Debug.Log("waypoints bro = " + waypoints.Count);
+        //    foreach (GameObject item in waypoints)
+        //    {
+        //        Debug.Log(item.transform.position);
+        //    }
+        //}
 
 
-        if (f_Pushed == true && done == true && waypoints.Count > 0)
-        {
-            //CalculateAngle();
-            //startObject.transform.Translate(startObject.transform.up * autoSpeed, Space.World);
-            ////ProgressTracker();
-            Debug.Log("bbbb ?");
-            Vector3 myLocation = startObject.transform.position;
-            Vector3 targetLocation = waypoints[currentWP].transform.position;
+        //if (f_Pushed == true && done == true && waypoints.Count > 0)
+        //{
+        //    //CalculateAngle();
+        //    //startObject.transform.Translate(startObject.transform.up * autoSpeed, Space.World);
+        //    ////ProgressTracker();
+        //    Debug.Log("bbbb ?");
+        //    Vector3 myLocation = startObject.transform.position;
+        //    Vector3 targetLocation = waypoints[currentWP].transform.position;
 
-            Vector3 direction = (tracker.transform.position - startObject.transform.position);
+        //    Vector3 direction = (tracker.transform.position - startObject.transform.position);
 
 
 
-            Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * direction;
-            Quaternion targetRotation = Quaternion.LookRotation(forward: Vector3.forward, upwards: rotatedVectorToTarget);
+        //    Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * direction;
+        //    Quaternion targetRotation = Quaternion.LookRotation(forward: Vector3.forward, upwards: rotatedVectorToTarget);
 
-            startObject.transform.rotation = Quaternion.Slerp(startObject.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        //    startObject.transform.rotation = Quaternion.Slerp(startObject.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-            startObject.transform.Translate(speed * Time.deltaTime, 0, 0);
+        //    startObject.transform.Translate(speed * Time.deltaTime, 0, 0);
 
-            Debug.DrawRay(startObject.transform.position, direction, Color.red);
-            Debug.DrawRay(startObject.transform.position, rotatedVectorToTarget, Color.green);
-            Debug.Log("The quaternion -  " + targetRotation);
-            Debug.Log("Green Y, Upwards vector " + rotatedVectorToTarget);
-            Debug.Log("Direction X, to target vector " + direction);
-            Debug.Log("Forward vector " + Vector3.forward);
-            Debug.DrawRay(startObject.transform.position, Vector3.up * 5, Color.yellow);
-            Debug.DrawRay(startObject.transform.position, Vector3.forward * 5, Color.white);
-        }
+        //    Debug.DrawRay(startObject.transform.position, direction, Color.red);
+        //    Debug.DrawRay(startObject.transform.position, rotatedVectorToTarget, Color.green);
+        //    Debug.Log("The quaternion -  " + targetRotation);
+        //    Debug.Log("Green Y, Upwards vector " + rotatedVectorToTarget);
+        //    Debug.Log("Direction X, to target vector " + direction);
+        //    Debug.Log("Forward vector " + Vector3.forward);
+        //    Debug.DrawRay(startObject.transform.position, Vector3.up * 5, Color.yellow);
+        //    Debug.DrawRay(startObject.transform.position, Vector3.forward * 5, Color.white);
+        //}
     }
 }
