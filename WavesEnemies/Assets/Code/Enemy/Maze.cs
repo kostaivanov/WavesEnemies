@@ -4,7 +4,7 @@ using UnityEngine;
 
 internal class Maze : MonoBehaviour
 {
-    internal List<LocationOnTheMap> direcitons = new List<LocationOnTheMap>
+    internal List<LocationOnTheMap> directions = new List<LocationOnTheMap>
     {
         new LocationOnTheMap(1, 0), //right neighbour
         new LocationOnTheMap(0, 1), //up neighbour
