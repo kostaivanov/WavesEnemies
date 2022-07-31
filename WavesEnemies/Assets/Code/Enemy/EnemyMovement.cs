@@ -19,7 +19,7 @@ internal class EnemyMovement : MonoBehaviour
 
     //[SerializeField] private GameObject goalObject;
     //[SerializeField] private GameObject startObject;
-    [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private LayerMask wallLayer, pathLayer;
     [SerializeField] internal SpriteRenderer backGround;
 
     private PathMarker startNode;
@@ -31,13 +31,13 @@ internal class EnemyMovement : MonoBehaviour
     //[SerializeField] protected Rigidbody2D rigidBody;
     [SerializeField] private float speed;
 
-    //public List<GameObject> waypoints;
-    //int currentWP = 0;
+    private List<GameObject> waypoints;
+    int currentWP = 0;
     //public float speedTracker = 1f;
-    //public float rotationSpeed = 2f;
+    [SerializeField] private float rotationSpeed = 0.5f;
 
     //public float lookAhead = 1f;
-    //private GameObject tracker;
+    private GameObject tracker;
 
     private float direction_X;
     private float direction_Y;
@@ -50,13 +50,13 @@ internal class EnemyMovement : MonoBehaviour
     void Start()
     {
         searching = false;
-       // waypoints = new List<GameObject>();
+        waypoints = new List<GameObject>();
 
-        //tracker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        //DestroyImmediate(tracker.GetComponent<Collider2D>());
-        //tracker.GetComponent<MeshRenderer>().enabled = false;
-        ///tracker.transform.position = startObject.transform.position;
-        ///tracker.transform.rotation = startObject.transform.rotation;
+        tracker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        DestroyImmediate(tracker.GetComponent<Collider2D>());
+        tracker.GetComponent<MeshRenderer>().enabled = false;
+        tracker.transform.position = start.transform.position;
+        tracker.transform.rotation = start.transform.rotation;
         f_Pushed = false;
     }
 
@@ -88,13 +88,13 @@ internal class EnemyMovement : MonoBehaviour
             }
         }
 
-        Vector3 startLocation = new Vector3(locations[0].x, locations[0].y, 0);
-        startNode = new PathMarker(new LocationOnTheMap(locations[0].x, locations[0].y), 0, 0, 0,
-            Instantiate(start, startLocation, transform.rotation * Quaternion.Euler(90f, 0, 0f)), null);
+        Vector3 startLocation = new Vector3(start.transform.position.x, start.transform.position.y, 0);
+        startNode = new PathMarker(new LocationOnTheMap(start.transform.position.x, start.transform.position.y), 0, 0, 0,
+            start, null);
 
-        Vector3 goalLocation = new Vector3(locations[1].x, locations[1].y, 0);
-        goalNode = new PathMarker(new LocationOnTheMap(locations[1].x, locations[1].y), 0, 0, 0,
-            Instantiate(end, goalLocation, transform.rotation * Quaternion.Euler(-90f, 0, 0f)), null);
+        Vector3 goalLocation = new Vector3(end.transform.position.x, end.transform.position.y, 0);
+        goalNode = new PathMarker(new LocationOnTheMap(end.transform.position.x, end.transform.position.y), 0, 0, 0,
+            end, null);
 
         //Vector3 startLocation = new Vector3(startObject.transform.position.x, startObject.transform.position.y, 0);
         //startNode = new PathMarker(new LocationOnTheMap(startObject.transform.position.x, startObject.transform.position.y), 0, 0, 0,
@@ -123,7 +123,7 @@ internal class EnemyMovement : MonoBehaviour
         ///float unityDistance = Vector3.Distance(thisNode.location.ToVector(), goalObject.transform.position);
         float unityDistance = Vector3.Distance(thisNode.location.ToVector(), end.transform.position);
         //Debug.Log("distance kva e we = " + unityDistance);
-        if (unityDistance < 2f)
+        if (unityDistance < 1f)
         {
             done = true;
             return; // the goal has been found
@@ -132,16 +132,17 @@ internal class EnemyMovement : MonoBehaviour
         foreach (LocationOnTheMap dir in maze.directions)
         {
             LocationOnTheMap neighbour = dir + thisNode.location;
-
+            //Debug.Log("x = " + neighbour.x + " , y = " + neighbour.y);
             //if (maze.map[(int)neighbour.x, (int)neighbour.y] == 1)
             //{
             //    Debug.Log("opaaaaaaaaaaaaaaaaaaaaaaa");
             //    continue;
             //}
 
-            bool colliders = Physics2D.OverlapBox(new Vector2(neighbour.x, neighbour.y), new Vector3(1, 1, 1), 90, wallLayer);
+            bool ifCollidesWall = Physics2D.OverlapBox(new Vector2(neighbour.x, neighbour.y), new Vector3(1, 1, 1), 90, wallLayer);
+            bool ifCollidesPath = Physics2D.OverlapBox(new Vector2(neighbour.x, neighbour.y), new Vector3(1, 1, 1), 90, pathLayer);
             //Debug.Log(colliders);
-            if (colliders == true)
+            if (ifCollidesWall == true || ifCollidesPath)
             {
                 //Debug.Log("xaxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                 continue;
@@ -178,15 +179,15 @@ internal class EnemyMovement : MonoBehaviour
             float G = Vector2.Distance(thisNode.location.ToVector(), neighbour.ToVector()) + thisNode.G;
             float F = G + H;
 
-            if (!IfNeighbourExist(neighbour, G, H, F, thisNode))
+            if (!IfNeighbourExist(neighbour, G, H, F, thisNode) || !CheckIfExistInClosedList(neighbour, G, H, F, thisNode))
             {
-                GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
+                GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), transform.rotation * Quaternion.Euler(0f, 0f, 0f));
 
 
                 TextMesh[] values = pathBlock.GetComponentsInChildren<TextMesh>();
-                values[0].text = "G: " + G.ToString("0.00000");
-                values[1].text = "H: " + H.ToString("0.00000");
-                values[2].text = "F: " + F.ToString("0.00000");
+                values[0].text = "G: " + G.ToString("0.0");
+                values[1].text = "H: " + H.ToString("0.0");
+                values[2].text = "F: " + F.ToString("0.0");
 
                 if (!UpdateMarker(neighbour, G, H, F, thisNode))
                 {
@@ -236,6 +237,18 @@ internal class EnemyMovement : MonoBehaviour
         //rigidBody.velocity = new Vector2(direction_X * speed, rigidBody.velocity.y);
     }
 
+    private bool CheckIfExistInClosedList(LocationOnTheMap position, float g, float h, float f, PathMarker parent)
+    {
+        foreach (PathMarker p in closed)
+        {
+            if (p.location.Equals(position) || p.H == h)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private bool UpdateMarker(LocationOnTheMap position, float g, float h, float f, PathMarker parent)
     {
         foreach (PathMarker p in open)
@@ -256,7 +269,8 @@ internal class EnemyMovement : MonoBehaviour
 
     private bool IfNeighbourExist(LocationOnTheMap position, float g, float h, float f, PathMarker parent)
     {
-        foreach (PathMarker p in open)
+        //foreach (var p in open.Zip(closed, (a, b) => new { A = a, B = b }))
+        foreach (var p in open)
         {
             if (p.location.Equals(position))
             {
@@ -291,74 +305,74 @@ internal class EnemyMovement : MonoBehaviour
         {
             GameObject pathObject_1 = Instantiate(PathParent, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
             begin = begin.parent;
-            //waypoints.Add(pathObject_1);
+            waypoints.Add(pathObject_1);
         }
 
-        GameObject pathObject_2 = Instantiate(PathParent, new Vector3(startNode.location.x, startNode.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
+        //GameObject pathObject_2 = Instantiate(PathParent, new Vector3(startNode.location.x, startNode.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
         //waypoints.Add(pathObject_2);
         //currentWP = waypoints.Count - 1;
     }
 
 
-    //private Vector3 Cross(Vector3 v, Vector3 w)
-    //{
-    //    float xMult = v.y * w.z - v.z * w.y;
-    //    float yMult = v.z * w.x - v.x * w.z;
-    //    float zMult = v.x * w.y - v.y * w.x;
+    private Vector3 Cross(Vector3 v, Vector3 w)
+    {
+        float xMult = v.y * w.z - v.z * w.y;
+        float yMult = v.z * w.x - v.x * w.z;
+        float zMult = v.x * w.y - v.y * w.x;
 
-    //    Vector3 crossProd = new Vector3(xMult, yMult, zMult);
-    //    return crossProd;
-    //}
+        Vector3 crossProd = new Vector3(xMult, yMult, zMult);
+        return crossProd;
+    }
 
-    //private void CalculateAngle()
-    //{
-    //    Vector3 pFrwd = startObject.transform.up;
-    //    Vector3 rDir = goalObject.transform.position - startObject.transform.position;
+    private void CalculateAngle()
+    {
+        Vector3 pFrwd = start.transform.up;
+        Vector3 rDir = end.transform.position - start.transform.position;
 
-    //    float dot = pFrwd.x * rDir.x + pFrwd.y * rDir.y;
-    //    float angle = Mathf.Acos(dot / (pFrwd.magnitude * rDir.magnitude));
+        float dot = pFrwd.x * rDir.x + pFrwd.y * rDir.y;
+        float angle = Mathf.Acos(dot / (pFrwd.magnitude * rDir.magnitude));
 
-    //    //Debug.Log("Angle: " + angle * Mathf.Rad2Deg);
-    //    //Debug.Log("Unity angle: " + Vector3.Angle(pFrwd, rDir));
+        //Debug.Log("Angle: " + angle * Mathf.Rad2Deg);
+        //Debug.Log("Unity angle: " + Vector3.Angle(pFrwd, rDir));
 
-    //    //Debug.DrawRay(this.transform.position, pFrwd * 15, Color.green, 2);
-    //    //Debug.DrawRay(this.transform.position, rDir, Color.red, 2);
+        //Debug.DrawRay(this.transform.position, pFrwd * 15, Color.green, 2);
+        //Debug.DrawRay(this.transform.position, rDir, Color.red, 2);
 
-    //    int clockWise = 1;
-    //    if (Cross(pFrwd, rDir).z < 0)
-    //    {
-    //        clockWise = -1;
-    //    }
+        int clockWise = 1;
+        if (Cross(pFrwd, rDir).z < 0)
+        {
+            clockWise = -1;
+        }
 
-    //    //Unity calculation on the angle
-    //    float unityAngle = Vector3.SignedAngle(pFrwd, rDir, startObject.transform.forward);
-    //    //Debug.Log("forward: " + this.transform.forward);
+        //Unity calculation on the angle
+        float unityAngle = Vector3.SignedAngle(pFrwd, rDir, start.transform.forward);
+        //Debug.Log("forward: " + this.transform.forward);
 
-    //    startObject.transform.Rotate(0, 0, unityAngle * 0.02f);
+        start.transform.Rotate(0, 0, unityAngle * 0.02f);
 
-    //    //this.transform.Rotate(0, 0, angle * Mathf.Rad2Deg * clockWise);
-    //}
-    //private void ProgressTracker()
-    //{
-    //    if (Vector3.Distance(tracker.transform.position, startObject.transform.position) > 1.5f)
-    //    {
-    //        //float dis = Vector3.Distance(tracker.transform.position, startObject.transform.position);
-    //        return;
-    //    }
+        //this.transform.Rotate(0, 0, angle * Mathf.Rad2Deg * clockWise);
+    }
+    private void ProgressTracker()
+    {
+        if (Vector3.Distance(tracker.transform.position, start.transform.position) > 1.5f)
+        {
+            //float dis = Vector3.Distance(tracker.transform.position, startObject.transform.position);
+            return;
+        }
 
-    //    if (Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 0.25f)
-    //    {
-    //        currentWP--;
-    //    }
+        if (Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 0.25f)
+        {
+            currentWP--;
+        }
 
-    //    if (currentWP == 0)
-    //    {
-    //        done = false;
-    //        currentWP = waypoints.Count - 1;
-    //    }
-    //    tracker.transform.LookAt(waypoints[currentWP].transform);
-    //    tracker.transform.Translate(0, 0, (speed + 0.5f) * Time.deltaTime);
-    //}
+        if (currentWP == 0)
+        {
+            done = false;
+            currentWP = waypoints.Count - 1;
+        }
+        tracker.transform.LookAt(waypoints[currentWP].transform);
+        tracker.transform.Translate(0, 0, (speed + 0.5f) * Time.deltaTime);
+    }
 
     // Update is called once per frame
     void Update()
@@ -371,7 +385,7 @@ internal class EnemyMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L) && !done)
         {
             searching = true;
-
+            //Search(lastPosition);
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -393,7 +407,7 @@ internal class EnemyMovement : MonoBehaviour
             Search(lastPosition);
         }
 
-        if (Input.GetKeyDown(KeyCode.M))
+        if (done == true)
         {
             GetPath();
         }
@@ -413,34 +427,34 @@ internal class EnemyMovement : MonoBehaviour
         //}
 
 
-        //if (f_Pushed == true && done == true && waypoints.Count > 0)
-        //{
-        //    //CalculateAngle();
-        //    //startObject.transform.Translate(startObject.transform.up * autoSpeed, Space.World);
-        //    ////ProgressTracker();
-        //    Debug.Log("bbbb ?");
-        //    Vector3 myLocation = startObject.transform.position;
-        //    Vector3 targetLocation = waypoints[currentWP].transform.position;
+        if (f_Pushed == true && done == true && waypoints.Count > 0)
+        {
+            CalculateAngle();
+            start.transform.Translate(start.transform.up * autoSpeed, Space.World);
+            //ProgressTracker();
+            Debug.Log("bbbb ?");
+            Vector3 myLocation = start.transform.position;
+            Vector3 targetLocation = waypoints[currentWP].transform.position;
 
-        //    Vector3 direction = (tracker.transform.position - startObject.transform.position);
+            Vector3 direction = (tracker.transform.position - start.transform.position);
 
 
 
-        //    Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * direction;
-        //    Quaternion targetRotation = Quaternion.LookRotation(forward: Vector3.forward, upwards: rotatedVectorToTarget);
+            Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * direction;
+            Quaternion targetRotation = Quaternion.LookRotation(forward: Vector3.forward, upwards: rotatedVectorToTarget);
 
-        //    startObject.transform.rotation = Quaternion.Slerp(startObject.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            start.transform.rotation = Quaternion.Slerp(start.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-        //    startObject.transform.Translate(speed * Time.deltaTime, 0, 0);
+            start.transform.Translate(speed * Time.deltaTime, 0, 0);
 
-        //    Debug.DrawRay(startObject.transform.position, direction, Color.red);
-        //    Debug.DrawRay(startObject.transform.position, rotatedVectorToTarget, Color.green);
-        //    Debug.Log("The quaternion -  " + targetRotation);
-        //    Debug.Log("Green Y, Upwards vector " + rotatedVectorToTarget);
-        //    Debug.Log("Direction X, to target vector " + direction);
-        //    Debug.Log("Forward vector " + Vector3.forward);
-        //    Debug.DrawRay(startObject.transform.position, Vector3.up * 5, Color.yellow);
-        //    Debug.DrawRay(startObject.transform.position, Vector3.forward * 5, Color.white);
-        //}
+            //Debug.DrawRay(start.transform.position, direction, Color.red);
+            //Debug.DrawRay(start.transform.position, rotatedVectorToTarget, Color.green);
+            //Debug.Log("The quaternion -  " + targetRotation);
+            //Debug.Log("Green Y, Upwards vector " + rotatedVectorToTarget);
+            //Debug.Log("Direction X, to target vector " + direction);
+            //Debug.Log("Forward vector " + Vector3.forward);
+            //Debug.DrawRay(start.transform.position, Vector3.up * 5, Color.yellow);
+            //Debug.DrawRay(start.transform.position, Vector3.forward * 5, Color.white);
+        }
     }
 }
