@@ -32,9 +32,9 @@ internal class EnemyMovement : MonoBehaviour
     [SerializeField] private float speed;
 
     private List<GameObject> waypoints;
-    int currentWP = 0;
+    int currentWP;
     //public float speedTracker = 1f;
-    [SerializeField] private float rotationSpeed = 0.5f;
+    [SerializeField] private float rotationSpeed = 2f;
 
     //public float lookAhead = 1f;
     private GameObject tracker;
@@ -115,17 +115,19 @@ internal class EnemyMovement : MonoBehaviour
 
     private void Search(PathMarker thisNode)
     {
-        if (thisNode.Equals(goalNode))
-        {
-            done = true;
-            return; // the goal has been found
-        }
+        //if (thisNode.Equals(goalNode))
+        //{
+        //    done = true;
+        //    return; // the goal has been found
+        //}
+
         ///float unityDistance = Vector3.Distance(thisNode.location.ToVector(), goalObject.transform.position);
         float unityDistance = Vector3.Distance(thisNode.location.ToVector(), end.transform.position);
         //Debug.Log("distance kva e we = " + unityDistance);
-        if (unityDistance < 1f)
+        if (unityDistance < 0.5f)
         {
             done = true;
+            searching = false;
             return; // the goal has been found
         }
 
@@ -306,10 +308,9 @@ internal class EnemyMovement : MonoBehaviour
             GameObject pathObject_1 = Instantiate(PathParent, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
             begin = begin.parent;
             waypoints.Add(pathObject_1);
-            Debug.Log(pathObject_1.name + " position = " + pathObject_1.transform.position);
-            //Debug.Log("waypoints count = " + waypoints.Count);
+            //Debug.Log(pathObject_1.name + " position = " + pathObject_1.transform.position + "begin - " + begin.location.ToVector() + "startnode - " + startNode.location.ToVector());
         }
-        done = false;
+        currentWP = waypoints.Count - 1;
         //GameObject pathObject_2 = Instantiate(PathParent, new Vector3(startNode.location.x, startNode.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
         //waypoints.Add(pathObject_2);
         //currentWP = waypoints.Count - 1;
@@ -362,7 +363,7 @@ internal class EnemyMovement : MonoBehaviour
             return;
         }
 
-        if (Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 0.25f)
+        if (Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 0.05f)
         {
             currentWP--;
         }
@@ -379,7 +380,6 @@ internal class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log("current waypoint = " + currentWP);
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
             BeginSearch();
@@ -412,6 +412,7 @@ internal class EnemyMovement : MonoBehaviour
         if (done == true)
         {
             GetPath();
+            done = false;
         }
         if (Input.GetKeyDown(KeyCode.K) && f_Pushed == false)
         {
@@ -431,8 +432,8 @@ internal class EnemyMovement : MonoBehaviour
 
         if (f_Pushed == true && waypoints.Count > 0)
         {
-            CalculateAngle();
-            start.transform.Translate(start.transform.up * autoSpeed, Space.World);
+            //CalculateAngle();
+            //start.transform.Translate(start.transform.up * autoSpeed, Space.World);
             ProgressTracker();
            // Debug.Log("bbbb ?");
             Vector3 myLocation = start.transform.position;
