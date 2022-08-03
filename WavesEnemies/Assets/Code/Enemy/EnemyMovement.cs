@@ -306,8 +306,10 @@ internal class EnemyMovement : MonoBehaviour
             GameObject pathObject_1 = Instantiate(PathParent, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
             begin = begin.parent;
             waypoints.Add(pathObject_1);
+            Debug.Log(pathObject_1.name + " position = " + pathObject_1.transform.position);
+            //Debug.Log("waypoints count = " + waypoints.Count);
         }
-
+        done = false;
         //GameObject pathObject_2 = Instantiate(PathParent, new Vector3(startNode.location.x, startNode.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
         //waypoints.Add(pathObject_2);
         //currentWP = waypoints.Count - 1;
@@ -427,12 +429,12 @@ internal class EnemyMovement : MonoBehaviour
         //}
 
 
-        if (f_Pushed == true && done == true && waypoints.Count > 0)
+        if (f_Pushed == true && waypoints.Count > 0)
         {
             CalculateAngle();
             start.transform.Translate(start.transform.up * autoSpeed, Space.World);
-            //ProgressTracker();
-            Debug.Log("bbbb ?");
+            ProgressTracker();
+           // Debug.Log("bbbb ?");
             Vector3 myLocation = start.transform.position;
             Vector3 targetLocation = waypoints[currentWP].transform.position;
 
