@@ -357,21 +357,22 @@ internal class EnemyMovement : MonoBehaviour
     }
     private void ProgressTracker()
     {
-        if (Vector3.Distance(tracker.transform.position, start.transform.position) > 1.5f)
+        if (Vector3.Distance(tracker.transform.position, start.transform.position) > 0.5f)
         {
             //float dis = Vector3.Distance(tracker.transform.position, startObject.transform.position);
             return;
         }
 
-        if (Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 0.05f)
+        if (currentWP > 0 && Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 0.05f)
         {
             currentWP--;
         }
 
-        if (currentWP == 0)
+        if (currentWP == 0 && Vector3.Distance(tracker.transform.position, end.transform.position) < 0.35f)
         {
             done = false;
-            currentWP = waypoints.Count - 1;
+            f_Pushed = false;
+            //currentWP = waypoints.Count - 1;
         }
         tracker.transform.LookAt(waypoints[currentWP].transform);
         tracker.transform.Translate(0, 0, (speed + 0.5f) * Time.deltaTime);
@@ -419,19 +420,9 @@ internal class EnemyMovement : MonoBehaviour
             f_Pushed = true;
         }
 
-
-        //if (Input.GetKeyDown(KeyCode.T))
-        //{
-        //    Debug.Log("waypoints bro = " + waypoints.Count);
-        //    foreach (GameObject item in waypoints)
-        //    {
-        //        Debug.Log(item.transform.position);
-        //    }
-        //}
-
-
         if (f_Pushed == true && waypoints.Count > 0)
         {
+
             //CalculateAngle();
             //start.transform.Translate(start.transform.up * autoSpeed, Space.World);
             ProgressTracker();
