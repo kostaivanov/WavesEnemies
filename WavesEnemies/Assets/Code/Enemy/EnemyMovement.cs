@@ -420,7 +420,7 @@ internal class EnemyMovement : MonoBehaviour
             f_Pushed = true;
         }
 
-        if (f_Pushed == true && waypoints.Count > 0)
+        if (start != null && f_Pushed == true && waypoints.Count > 0)
         {
 
             //CalculateAngle();
