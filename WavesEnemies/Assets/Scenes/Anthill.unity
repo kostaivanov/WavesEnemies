@@ -154,11 +154,6 @@ Transform:
   m_Father: {fileID: 515075593}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 40}
---- !u!1 &117062847 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3934560469314609648, guid: eee376fd759235c4087e439ee931a1a5, type: 3}
-  m_PrefabInstance: {fileID: 3934560469405179215}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &515075591
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,7 +482,7 @@ GameObject:
   - component: {fileID: 722716006}
   m_Layer: 0
   m_Name: Land
-  m_TagString: Untagged
+  m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -615,16 +610,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 722716000}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd0058d8df4d75d419e4061525560794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maze: {fileID: 1037562627}
   closedMaterial: {fileID: 2100000, guid: e4195967d9e1fbc45908f8f97fe74120, type: 2}
   openMaterial: {fileID: 2100000, guid: df95dea97a25a2f40b808bb989134e5d, type: 2}
-  start: {fileID: 117062847}
-  end: {fileID: 2107381006}
   PathParent: {fileID: 6707052016461994131, guid: 541bbc590c867ad4db48ad17ccebbff1, type: 3}
   wallLayer:
     serializedVersion: 2
@@ -632,7 +624,6 @@ MonoBehaviour:
   pathLayer:
     serializedVersion: 2
     m_Bits: 128
-  backGround: {fileID: 722716002}
   speed: 1
   rotationSpeed: 2
 --- !u!1 &754261960
@@ -752,7 +743,7 @@ GameObject:
   - component: {fileID: 1037562627}
   m_Layer: 0
   m_Name: Maze
-  m_TagString: Untagged
+  m_TagString: Maze
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -822,8 +813,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectsToBePooled:
   - {fileID: 3934560469314609648, guid: eee376fd759235c4087e439ee931a1a5, type: 3}
-  pooledAmount: 10
-  willGrow: 1
+  pooledAmount: 5
+  willGrow: 0
   parentInstantiateObject: {fileID: 1103619578}
 --- !u!4 &1103619580
 Transform:
@@ -852,7 +843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f2a1765cc0b20c4abca2072df8595ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  addToSpawnTime: 1
+  addToSpawnTime: 3
 --- !u!1 &1214793012
 GameObject:
   m_ObjectHideFlags: 0
@@ -1063,7 +1054,7 @@ GameObject:
   - component: {fileID: 2107381011}
   m_Layer: 0
   m_Name: Anthill
-  m_TagString: Untagged
+  m_TagString: Destination
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

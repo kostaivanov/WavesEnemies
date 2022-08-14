@@ -45,10 +45,11 @@ public class SpawnAnts : MonoBehaviour
         {
             //typeObject = antsNames[Random.Range(0, antsNames.Length)];
             typeObject = antsNames[0];
-            Debug.Log("random  = " + typeObject);
+            //Debug.Log("random  = " + typeObject);
 
         }
         GameObject obj = AntsPooler.current.GetPooledObject(typeObject);
+        //Debug.Log("obj  == null " + obj == null);
         if (obj == null)
         {
             return;

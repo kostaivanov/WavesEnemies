@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Marker
   - Enemy
+  - Maze
+  - Destination
+  - Background
   layers:
   - Default
   - TransparentFX

@@ -11,6 +11,11 @@ public class AntsPooler : MonoBehaviour
     internal List<GameObject> pooledObjects;
     [SerializeField] internal GameObject parentInstantiateObject;
 
+    private void Awake()
+    {
+        current = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +39,7 @@ public class AntsPooler : MonoBehaviour
         {
             string[] prefabsFullName = pooledObjects[i].name.Split(new char[] { '(', ')' }, System.StringSplitOptions.RemoveEmptyEntries);
             string name = prefabsFullName[0];
-            Debug.Log("name = " + name);
+            //Debug.Log("name = " + name);
             if (name == typeObject && !pooledObjects[i].activeInHierarchy)
             {
                 return pooledObjects[i];

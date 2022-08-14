@@ -5,22 +5,22 @@ using System.Linq;
 
 internal class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] private Maze maze;
+    private Maze maze;
     [SerializeField] private Material closedMaterial;
     [SerializeField] private Material openMaterial;
 
     List<PathMarker> open = new List<PathMarker>();
     List<PathMarker> closed = new List<PathMarker>();
 
-    [SerializeField] private GameObject start;
-    [SerializeField] private GameObject end;
+    //private GameObject start;
+    private GameObject end;
     [SerializeField] private GameObject PathParent;
 
 
     //[SerializeField] private GameObject goalObject;
     //[SerializeField] private GameObject startObject;
     [SerializeField] private LayerMask wallLayer, pathLayer;
-    [SerializeField] internal SpriteRenderer backGround;
+    internal SpriteRenderer backGround;
 
     private PathMarker startNode;
     private PathMarker goalNode;
@@ -42,22 +42,46 @@ internal class EnemyMovement : MonoBehaviour
     private float direction_X;
     private float direction_Y;
 
-    private bool searching;
+    private bool searching = false;
     private float autoSpeed = 0.05f;
     private bool f_Pushed;
+
+
+    private void Awake()
+    {
+        maze = GameObject.FindGameObjectWithTag("Maze").GetComponent<Maze>();
+        end = GameObject.FindGameObjectWithTag("Destination");
+        backGround = GameObject.FindGameObjectWithTag("Background").GetComponent<SpriteRenderer>();
+        //Debug.Log("maze = " + maze == null);
+        //Debug.Log("end = " + end == null);
+        //Debug.Log("backGround = " + backGround == null);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        searching = false;
         waypoints = new List<GameObject>();
 
         tracker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         DestroyImmediate(tracker.GetComponent<Collider2D>());
         tracker.GetComponent<MeshRenderer>().enabled = false;
-        tracker.transform.position = start.transform.position;
-        tracker.transform.rotation = start.transform.rotation;
+        tracker.transform.position = this.gameObject.transform.position;
+        tracker.transform.rotation = this.gameObject.transform.rotation;
         f_Pushed = false;
+    }
+
+    private void OnEnable()
+    {
+        BeginSearch();
+        if (!done)
+        {
+            searching = true;
+        }
+    }
+
+    private void OnDisable()
+    {
+        
     }
 
     private void RemoveAllMarkers()
@@ -88,9 +112,9 @@ internal class EnemyMovement : MonoBehaviour
             }
         }
 
-        Vector3 startLocation = new Vector3(start.transform.position.x, start.transform.position.y, 0);
-        startNode = new PathMarker(new LocationOnTheMap(start.transform.position.x, start.transform.position.y), 0, 0, 0,
-            start, null);
+        Vector3 startLocation = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, 0);
+        startNode = new PathMarker(new LocationOnTheMap(this.gameObject.transform.position.x, this.gameObject.transform.position.y), 0, 0, 0,
+            this.gameObject, null);
 
         Vector3 goalLocation = new Vector3(end.transform.position.x, end.transform.position.y, 0);
         goalNode = new PathMarker(new LocationOnTheMap(end.transform.position.x, end.transform.position.y), 0, 0, 0,
@@ -306,6 +330,7 @@ internal class EnemyMovement : MonoBehaviour
         while (!startNode.Equals(begin) && begin != null)
         {
             GameObject pathObject_1 = Instantiate(PathParent, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
+            //pathObject_1.transform.parent = this.gameObject.transform;
             begin = begin.parent;
             waypoints.Add(pathObject_1);
             //Debug.Log(pathObject_1.name + " position = " + pathObject_1.transform.position + "begin - " + begin.location.ToVector() + "startnode - " + startNode.location.ToVector());
@@ -329,8 +354,8 @@ internal class EnemyMovement : MonoBehaviour
 
     private void CalculateAngle()
     {
-        Vector3 pFrwd = start.transform.up;
-        Vector3 rDir = end.transform.position - start.transform.position;
+        Vector3 pFrwd = this.gameObject.transform.up;
+        Vector3 rDir = end.transform.position - this.gameObject.transform.position;
 
         float dot = pFrwd.x * rDir.x + pFrwd.y * rDir.y;
         float angle = Mathf.Acos(dot / (pFrwd.magnitude * rDir.magnitude));
@@ -348,16 +373,16 @@ internal class EnemyMovement : MonoBehaviour
         }
 
         //Unity calculation on the angle
-        float unityAngle = Vector3.SignedAngle(pFrwd, rDir, start.transform.forward);
+        float unityAngle = Vector3.SignedAngle(pFrwd, rDir, this.gameObject.transform.forward);
         //Debug.Log("forward: " + this.transform.forward);
 
-        start.transform.Rotate(0, 0, unityAngle * 0.02f);
+        this.gameObject.transform.Rotate(0, 0, unityAngle * 0.02f);
 
         //this.transform.Rotate(0, 0, angle * Mathf.Rad2Deg * clockWise);
     }
     private void ProgressTracker()
     {
-        if (Vector3.Distance(tracker.transform.position, start.transform.position) > 0.5f)
+        if (Vector3.Distance(tracker.transform.position, this.gameObject.transform.position) > 0.5f)
         {
             //float dis = Vector3.Distance(tracker.transform.position, startObject.transform.position);
             return;
@@ -381,22 +406,22 @@ internal class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
-        {
-            BeginSearch();
-        }
-        if (Input.GetKeyDown(KeyCode.L) && !done)
-        {
-            searching = true;
-            //Search(lastPosition);
-        }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            foreach (PathMarker item in closed)
-            {
-                Debug.Log(item.F);
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.LeftAlt))
+        //{
+        //    BeginSearch();
+        //}
+        //if (Input.GetKeyDown(KeyCode.L) && !done)
+        //{
+        //    searching = true;
+        //    //Search(lastPosition);
+        //}
+        //if (Input.GetKeyDown(KeyCode.C))
+        //{
+        //    foreach (PathMarker item in closed)
+        //    {
+        //        Debug.Log(item.F);
+        //    }
+        //}
         //if (Input.GetKeyDown(KeyCode.O))
         //{
         //    foreach (PathMarker item in open)
@@ -404,6 +429,7 @@ internal class EnemyMovement : MonoBehaviour
         //        Debug.Log(item.F);
         //    }
         //}
+
 
         if (searching == true)
         {
@@ -414,32 +440,36 @@ internal class EnemyMovement : MonoBehaviour
         {
             GetPath();
             done = false;
+            if (f_Pushed == false)
+            {
+                f_Pushed = true;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.K) && f_Pushed == false)
-        {
-            f_Pushed = true;
-        }
+        //if (Input.GetKeyDown(KeyCode.K) && f_Pushed == false)
+        //{
+        //    f_Pushed = true;
+        //}
 
-        if (start != null && f_Pushed == true && waypoints.Count > 0)
+        if (this.gameObject != null && f_Pushed == true && waypoints.Count > 0)
         {
 
             //CalculateAngle();
             //start.transform.Translate(start.transform.up * autoSpeed, Space.World);
             ProgressTracker();
            // Debug.Log("bbbb ?");
-            Vector3 myLocation = start.transform.position;
+            Vector3 myLocation = this.gameObject.transform.position;
             Vector3 targetLocation = waypoints[currentWP].transform.position;
 
-            Vector3 direction = (tracker.transform.position - start.transform.position);
+            Vector3 direction = (tracker.transform.position - this.gameObject.transform.position);
 
 
 
             Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * direction;
             Quaternion targetRotation = Quaternion.LookRotation(forward: Vector3.forward, upwards: rotatedVectorToTarget);
 
-            start.transform.rotation = Quaternion.Slerp(start.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-            start.transform.Translate(speed * Time.deltaTime, 0, 0);
+            this.gameObject.transform.Translate(speed * Time.deltaTime, 0, 0);
 
             //Debug.DrawRay(start.transform.position, direction, Color.red);
             //Debug.DrawRay(start.transform.position, rotatedVectorToTarget, Color.green);
