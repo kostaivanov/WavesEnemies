@@ -90,10 +90,18 @@ internal class EnemyMovement : MonoBehaviour
 
         foreach (GameObject marker in markers)
         {
-            Destroy(marker);
+            Destroy(marker.gameObject);
         }
     }
+    private void RemoveMarkers(GameObject obj)
+    {
+        //GameObject[] markers = GameObject.FindGameObjectsWithTag("Marker");
 
+        foreach (Transform marker in obj.transform)
+        {
+            Destroy(marker.gameObject);
+        }
+    }
     private void BeginSearch()
     {
         done = false;
@@ -325,12 +333,19 @@ internal class EnemyMovement : MonoBehaviour
     }
     private void GetPath()
     {
-        RemoveAllMarkers();
+        GameObject emptyObj = new GameObject();
+        emptyObj.transform.parent = maze.gameObject.transform;
+        emptyObj.name = this.gameObject.name;
+
+
+        RemoveMarkers(emptyObj);
+    
         PathMarker begin = lastPosition;
         while (!startNode.Equals(begin) && begin != null)
         {
             GameObject pathObject_1 = Instantiate(PathParent, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
-            //pathObject_1.transform.parent = this.gameObject.transform;
+
+            pathObject_1.transform.parent = emptyObj.gameObject.transform;
             begin = begin.parent;
             waypoints.Add(pathObject_1);
             //Debug.Log(pathObject_1.name + " position = " + pathObject_1.transform.position + "begin - " + begin.location.ToVector() + "startnode - " + startNode.location.ToVector());
