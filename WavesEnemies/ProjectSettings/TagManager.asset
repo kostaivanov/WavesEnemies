@@ -9,6 +9,7 @@ TagManager:
   - Maze
   - Destination
   - Background
+  - PathMarker
   layers:
   - Default
   - TransparentFX

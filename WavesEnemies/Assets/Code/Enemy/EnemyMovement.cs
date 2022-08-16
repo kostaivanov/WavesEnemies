@@ -338,12 +338,12 @@ internal class EnemyMovement : MonoBehaviour
         emptyObj.name = this.gameObject.name;
 
 
-        RemoveMarkers(emptyObj);
+        RemoveAllMarkers();
     
         PathMarker begin = lastPosition;
         while (!startNode.Equals(begin) && begin != null)
         {
-            GameObject pathObject_1 = Instantiate(PathParent, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
+            GameObject pathObject_1 = Instantiate(new GameObject(), new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
 
             pathObject_1.transform.parent = emptyObj.gameObject.transform;
             begin = begin.parent;
