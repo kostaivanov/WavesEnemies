@@ -643,6 +643,7 @@ MonoBehaviour:
   closedMaterial: {fileID: 2100000, guid: e4195967d9e1fbc45908f8f97fe74120, type: 2}
   openMaterial: {fileID: 2100000, guid: df95dea97a25a2f40b808bb989134e5d, type: 2}
   PathParent: {fileID: 6707052016461994131, guid: 541bbc590c867ad4db48ad17ccebbff1, type: 3}
+  emptyBlock: {fileID: 0}
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -823,7 +824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1103619579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -838,7 +839,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectsToBePooled:
   - {fileID: 3934560469314609648, guid: eee376fd759235c4087e439ee931a1a5, type: 3}
-  pooledAmount: 5
+  pooledAmount: 1
   willGrow: 0
   parentInstantiateObject: {fileID: 1103619578}
 --- !u!4 &1103619580

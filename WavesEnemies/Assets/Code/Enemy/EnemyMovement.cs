@@ -14,8 +14,7 @@ internal class EnemyMovement : MonoBehaviour
 
     //private GameObject start;
     private GameObject end;
-    [SerializeField] private GameObject PathParent;
-
+    [SerializeField] private GameObject PathParent, emptyBlock;
 
     //[SerializeField] private GameObject goalObject;
     //[SerializeField] private GameObject startObject;
@@ -37,7 +36,7 @@ internal class EnemyMovement : MonoBehaviour
     [SerializeField] private float rotationSpeed = 2f;
 
     //public float lookAhead = 1f;
-    private GameObject tracker;
+    internal GameObject tracker;
 
     private float direction_X;
     private float direction_Y;
@@ -46,6 +45,7 @@ internal class EnemyMovement : MonoBehaviour
     private float autoSpeed = 0.05f;
     private bool f_Pushed;
 
+    internal Quaternion startRotation;
 
     private void Awake()
     {
@@ -60,6 +60,8 @@ internal class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        startRotation = this.gameObject.transform.rotation;
+        //index = this.transform.GetSiblingIndex();
         waypoints = new List<GameObject>();
 
         tracker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -67,12 +69,18 @@ internal class EnemyMovement : MonoBehaviour
         tracker.GetComponent<MeshRenderer>().enabled = false;
         tracker.transform.position = this.gameObject.transform.position;
         tracker.transform.rotation = this.gameObject.transform.rotation;
+        tracker.name = tracker.name+ this.gameObject.transform.GetSiblingIndex();
         f_Pushed = false;
     }
 
     private void OnEnable()
     {
+        if (tracker != null)
+        {
+            tracker.transform.position = this.gameObject.transform.position;
+        }
         BeginSearch();
+
         if (!done)
         {
             searching = true;
@@ -81,7 +89,11 @@ internal class EnemyMovement : MonoBehaviour
 
     private void OnDisable()
     {
-        
+        this.gameObject.transform.rotation = startRotation;
+        if (tracker != null)
+        {
+            tracker.transform.rotation = startRotation;
+        }
     }
 
     private void RemoveAllMarkers()
@@ -336,18 +348,17 @@ internal class EnemyMovement : MonoBehaviour
         GameObject emptyObj = new GameObject();
         emptyObj.transform.parent = maze.gameObject.transform;
         emptyObj.name = this.gameObject.name;
-        Debug.Log("how many times?");
 
         RemoveAllMarkers();
     
         PathMarker begin = lastPosition;
         while (!startNode.Equals(begin) && begin != null)
         {
-            GameObject pathObject_1 = Instantiate(new GameObject(), new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
+            GameObject pathObject = Instantiate(emptyBlock, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
 
-            pathObject_1.transform.parent = emptyObj.gameObject.transform;
+            pathObject.transform.parent = emptyObj.gameObject.transform;
             begin = begin.parent;
-            waypoints.Add(pathObject_1);
+            waypoints.Add(pathObject);
             //Debug.Log(pathObject_1.name + " position = " + pathObject_1.transform.position + "begin - " + begin.location.ToVector() + "startnode - " + startNode.location.ToVector());
         }
         currentWP = waypoints.Count - 1;
@@ -444,7 +455,6 @@ internal class EnemyMovement : MonoBehaviour
         //        Debug.Log(item.F);
         //    }
         //}
-
 
         if (searching == true)
         {

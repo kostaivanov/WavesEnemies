@@ -149,6 +149,7 @@ MonoBehaviour:
   closedMaterial: {fileID: 2100000, guid: e4195967d9e1fbc45908f8f97fe74120, type: 2}
   openMaterial: {fileID: 2100000, guid: df95dea97a25a2f40b808bb989134e5d, type: 2}
   PathParent: {fileID: 6707052016461994131, guid: 541bbc590c867ad4db48ad17ccebbff1, type: 3}
+  emptyBlock: {fileID: 1715622695439558335, guid: 17c71596c9d162b43a070118a7b2fa10, type: 3}
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
