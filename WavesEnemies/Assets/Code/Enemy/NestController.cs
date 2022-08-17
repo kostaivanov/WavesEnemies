@@ -15,8 +15,8 @@ public class NestController : MonoBehaviour
     {
         if (otherObject.tag == "Enemy")
         {
-            Debug.Log("triger");
-            Destroy(otherObject.gameObject);
+            otherObject.gameObject.SetActive(false);
+            otherObject.gameObject.transform.position = otherObject.gameObject.transform.parent.position;
         }
     }
 }

@@ -336,7 +336,7 @@ internal class EnemyMovement : MonoBehaviour
         GameObject emptyObj = new GameObject();
         emptyObj.transform.parent = maze.gameObject.transform;
         emptyObj.name = this.gameObject.name;
-
+        Debug.Log("how many times?");
 
         RemoveAllMarkers();
     
