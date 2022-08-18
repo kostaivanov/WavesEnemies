@@ -19,6 +19,8 @@ public class NestController : MonoBehaviour
             otherObject.gameObject.transform.position = otherObject.gameObject.transform.parent.position;
             EnemyMovement enemyMovement = otherObject.gameObject.GetComponent<EnemyMovement>();
             otherObject.gameObject.transform.rotation = enemyMovement.startRotation;
+
+            enemyMovement.tracker.transform.position = new Vector3(otherObject.gameObject.transform.parent.position.x + 1, otherObject.gameObject.transform.parent.position.y, otherObject.gameObject.transform.parent.position.z);
             enemyMovement.tracker.transform.rotation = enemyMovement.startRotation;
         }
     }

@@ -14,6 +14,7 @@ internal class EnemyMovement : MonoBehaviour
 
     //private GameObject start;
     private GameObject end;
+    private GameObject pathObjectsParent;
     [SerializeField] private GameObject PathParent, emptyBlock;
 
     //[SerializeField] private GameObject goalObject;
@@ -75,10 +76,6 @@ internal class EnemyMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        if (tracker != null)
-        {
-            tracker.transform.position = this.gameObject.transform.position;
-        }
         BeginSearch();
 
         if (!done)
@@ -90,9 +87,10 @@ internal class EnemyMovement : MonoBehaviour
     private void OnDisable()
     {
         this.gameObject.transform.rotation = startRotation;
-        if (tracker != null)
+
+        if (pathObjectsParent != null && pathObjectsParent.transform.childCount > 0)
         {
-            tracker.transform.rotation = startRotation;
+            RemoveMarkers(pathObjectsParent);
         }
     }
 
@@ -345,9 +343,13 @@ internal class EnemyMovement : MonoBehaviour
     }
     private void GetPath()
     {
-        GameObject emptyObj = new GameObject();
-        emptyObj.transform.parent = maze.gameObject.transform;
-        emptyObj.name = this.gameObject.name;
+        if (pathObjectsParent == null)
+        {
+            pathObjectsParent = new GameObject();
+            pathObjectsParent.transform.parent = maze.gameObject.transform;
+            pathObjectsParent.name = this.gameObject.name;
+        }
+
 
         RemoveAllMarkers();
     
@@ -356,7 +358,7 @@ internal class EnemyMovement : MonoBehaviour
         {
             GameObject pathObject = Instantiate(emptyBlock, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
 
-            pathObject.transform.parent = emptyObj.gameObject.transform;
+            pathObject.transform.parent = pathObjectsParent.gameObject.transform;
             begin = begin.parent;
             waypoints.Add(pathObject);
             //Debug.Log(pathObject_1.name + " position = " + pathObject_1.transform.position + "begin - " + begin.location.ToVector() + "startnode - " + startNode.location.ToVector());
