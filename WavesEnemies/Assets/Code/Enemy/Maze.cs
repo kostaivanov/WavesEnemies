@@ -42,7 +42,7 @@ internal class Maze : MonoBehaviour
 
         InitialiseMap();
         MarkTheGround();
-        DrawMap();
+        //DrawMap();
 
         //Debug.Log("map width = " + map.GetLength(0));
         //Debug.Log("map height = " + map.GetLength(1));

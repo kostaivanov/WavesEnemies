@@ -484,8 +484,8 @@ internal class EnemyMovement : MonoBehaviour
             //start.transform.Translate(start.transform.up * autoSpeed, Space.World);
             ProgressTracker();
            // Debug.Log("bbbb ?");
-            Vector3 myLocation = this.gameObject.transform.position;
-            Vector3 targetLocation = waypoints[currentWP].transform.position;
+           // Vector3 myLocation = this.gameObject.transform.position;
+           //  Vector3 targetLocation = waypoints[currentWP].transform.position;
 
             Vector3 direction = (tracker.transform.position - this.gameObject.transform.position);
 
@@ -506,6 +506,23 @@ internal class EnemyMovement : MonoBehaviour
             //Debug.Log("Forward vector " + Vector3.forward);
             //Debug.DrawRay(start.transform.position, Vector3.up * 5, Color.yellow);
             //Debug.DrawRay(start.transform.position, Vector3.forward * 5, Color.white);
+        }
+    }
+    private void OnTriggerStay2D(Collider2D otherObject)
+    {
+        int layerName = LayerMask.NameToLayer("GroundLayer");
+        if (otherObject.gameObject.layer == layerName)
+        {
+            f_Pushed = false;
+            done = true;
+            searching = false;
+
+            BeginSearch();
+
+            if (!done)
+            {
+                searching = true;
+            }
         }
     }
 }
