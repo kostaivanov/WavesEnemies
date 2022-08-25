@@ -21,6 +21,10 @@ internal class EnemyMovement : MonoBehaviour
     //[SerializeField] private GameObject startObject;
     [SerializeField] private LayerMask wallLayer, pathLayer;
     internal SpriteRenderer backGround;
+    internal Camera mainCamera;
+    private Vector2 screenBounds;
+    private float objectWidth;
+    private float objectHeight;
 
     private PathMarker startNode;
     private PathMarker goalNode;
@@ -52,7 +56,7 @@ internal class EnemyMovement : MonoBehaviour
     {
         maze = GameObject.FindGameObjectWithTag("Maze").GetComponent<Maze>();
         end = GameObject.FindGameObjectWithTag("Destination");
-        backGround = GameObject.FindGameObjectWithTag("Background").GetComponent<SpriteRenderer>();
+        //backGround = GameObject.FindGameObjectWithTag("Background").GetComponent<SpriteRenderer>();
         //Debug.Log("maze = " + maze == null);
         //Debug.Log("end = " + end == null);
         //Debug.Log("backGround = " + backGround == null);
@@ -61,6 +65,14 @@ internal class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        mainCamera = Camera.main;
+        screenBounds = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, mainCamera.transform.position.z));
+        float objectHeight = mainCamera.orthographicSize;
+        float objectWidth = objectHeight * mainCamera.aspect;
+
+        //objectWidth = mainCamera.transform.GetComponent<SpriteRenderer>().bounds.extents.x; //extents = size of width / 2
+        //objectHeight = mainCamera.transform.GetComponent<SpriteRenderer>().bounds.extents.y; //extents = size of height / 2
+        Debug.Log("width = " + objectWidth + " - height = " + objectHeight);
         startRotation = this.gameObject.transform.rotation;
         //index = this.transform.GetSiblingIndex();
         waypoints = new List<GameObject>();
@@ -202,11 +214,17 @@ internal class EnemyMovement : MonoBehaviour
             //    //    continue;
             //    //}
 
-            float leftCorner = backGround.transform.position.x - backGround.bounds.extents.x;
-            float rightCorner = backGround.transform.position.x + backGround.bounds.extents.x;
+            //float leftCorner = backGround.transform.position.x - backGround.bounds.extents.x;
+            //float rightCorner = backGround.transform.position.x + backGround.bounds.extents.x;
 
-            float topCorner = backGround.transform.position.y + backGround.bounds.extents.y;
-            float bottomCorner = backGround.transform.position.y - backGround.bounds.extents.y;
+            //float topCorner = backGround.transform.position.y + backGround.bounds.extents.y;
+            //float bottomCorner = backGround.transform.position.y - backGround.bounds.extents.y;
+
+            float leftCorner = mainCamera.transform.position.x - objectWidth;
+            float rightCorner = mainCamera.transform.position.x + objectWidth;
+
+            float topCorner = mainCamera.transform.position.y + objectHeight;
+            float bottomCorner = mainCamera.transform.position.y - objectHeight;
 
             if (neighbour.x < Mathf.Round(leftCorner) || neighbour.x > Mathf.Round(rightCorner) || neighbour.y < Mathf.Round(bottomCorner) || neighbour.y > Mathf.Round(topCorner))
             {
@@ -225,8 +243,8 @@ internal class EnemyMovement : MonoBehaviour
 
             if (!IfNeighbourExist(neighbour, G, H, F, thisNode) || !CheckIfExistInClosedList(neighbour, G, H, F, thisNode))
             {
-                GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), transform.rotation * Quaternion.Euler(0f, 0f, 0f));
-
+                //GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), transform.rotation * Quaternion.Euler(0f, 0f, 0f));
+                GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), Quaternion.identity);
 
                 TextMesh[] values = pathBlock.GetComponentsInChildren<TextMesh>();
                 values[0].text = "G: " + G.ToString("0.0");
@@ -508,21 +526,21 @@ internal class EnemyMovement : MonoBehaviour
             //Debug.DrawRay(start.transform.position, Vector3.forward * 5, Color.white);
         }
     }
-    private void OnTriggerStay2D(Collider2D otherObject)
-    {
-        int layerName = LayerMask.NameToLayer("GroundLayer");
-        if (otherObject.gameObject.layer == layerName)
-        {
-            f_Pushed = false;
-            done = true;
-            searching = false;
+    //private void OnTriggerStay2D(Collider2D otherObject)
+    //{
+    //    int layerName = LayerMask.NameToLayer("GroundLayer");
+    //    if (otherObject.gameObject.layer == layerName)
+    //    {
+    //        f_Pushed = false;
+    //        done = true;
+    //        searching = false;
 
-            BeginSearch();
+    //        BeginSearch();
 
-            if (!done)
-            {
-                searching = true;
-            }
-        }
-    }
+    //        if (!done)
+    //        {
+    //            searching = true;
+    //        }
+    //    }
+    //}
 }
