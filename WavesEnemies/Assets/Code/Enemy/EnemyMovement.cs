@@ -222,12 +222,12 @@ internal class EnemyMovement : MonoBehaviour
 
             float leftCorner = mainCamera.transform.position.x - objectWidth;
             float rightCorner = mainCamera.transform.position.x + objectWidth;
-            Debug.Log($"leftCorner = {mainCamera.transform.position.x} - {objectWidth} = {mainCamera.transform.position.x - objectWidth}");
+            //Debug.Log($"leftCorner = {mainCamera.transform.position.x} - {objectWidth} = {mainCamera.transform.position.x - objectWidth}");
             float topCorner = mainCamera.transform.position.y + objectHeight;
             float bottomCorner = mainCamera.transform.position.y - objectHeight;
             
 
-            Debug.Log("leftCorner = " + leftCorner + "; rightCorner = " + rightCorner + "; topCorner = " + topCorner + "; bottomCorner = " + bottomCorner);
+            //Debug.Log("leftCorner = " + leftCorner + "; rightCorner = " + rightCorner + "; topCorner = " + topCorner + "; bottomCorner = " + bottomCorner);
 
             if (neighbour.x < Mathf.Round(leftCorner) || neighbour.x > Mathf.Round(rightCorner) || neighbour.y < Mathf.Round(bottomCorner) || neighbour.y > Mathf.Round(topCorner))
             {
@@ -243,10 +243,11 @@ internal class EnemyMovement : MonoBehaviour
             float H = Vector2.Distance(neighbour.ToVector(), goalNode.location.ToVector());
             float G = Vector2.Distance(thisNode.location.ToVector(), neighbour.ToVector()) + thisNode.G;
             float F = G + H;
-
-            if (!IfNeighbourExist(neighbour, G, H, F, thisNode) || !CheckIfExistInClosedList(neighbour, G, H, F, thisNode))
+            Collider[] hitColliders = Physics.OverlapSphere(neighbour.ToVector(), 0.2f, pathLayer);
+            if (!IfNeighbourExist(neighbour, G, H, F, thisNode) || !CheckIfExistInClosedList(neighbour, G, H, F, thisNode) || hitColliders.Length == 0)
             {
                 //GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), transform.rotation * Quaternion.Euler(0f, 0f, 0f));
+
                 GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), Quaternion.identity);
 
                 TextMesh[] values = pathBlock.GetComponentsInChildren<TextMesh>();
