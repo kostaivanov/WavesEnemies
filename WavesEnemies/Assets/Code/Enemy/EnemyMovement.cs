@@ -67,8 +67,8 @@ internal class EnemyMovement : MonoBehaviour
     {
         mainCamera = Camera.main;
         screenBounds = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, mainCamera.transform.position.z));
-        float objectHeight = mainCamera.orthographicSize;
-        float objectWidth = objectHeight * mainCamera.aspect;
+        objectHeight = mainCamera.orthographicSize;
+        objectWidth = objectHeight * mainCamera.aspect;
 
         //objectWidth = mainCamera.transform.GetComponent<SpriteRenderer>().bounds.extents.x; //extents = size of width / 2
         //objectHeight = mainCamera.transform.GetComponent<SpriteRenderer>().bounds.extents.y; //extents = size of height / 2
@@ -222,9 +222,12 @@ internal class EnemyMovement : MonoBehaviour
 
             float leftCorner = mainCamera.transform.position.x - objectWidth;
             float rightCorner = mainCamera.transform.position.x + objectWidth;
-
+            Debug.Log($"leftCorner = {mainCamera.transform.position.x} - {objectWidth} = {mainCamera.transform.position.x - objectWidth}");
             float topCorner = mainCamera.transform.position.y + objectHeight;
             float bottomCorner = mainCamera.transform.position.y - objectHeight;
+            
+
+            Debug.Log("leftCorner = " + leftCorner + "; rightCorner = " + rightCorner + "; topCorner = " + topCorner + "; bottomCorner = " + bottomCorner);
 
             if (neighbour.x < Mathf.Round(leftCorner) || neighbour.x > Mathf.Round(rightCorner) || neighbour.y < Mathf.Round(bottomCorner) || neighbour.y > Mathf.Round(topCorner))
             {
