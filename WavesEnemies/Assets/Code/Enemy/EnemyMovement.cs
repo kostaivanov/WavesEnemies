@@ -49,8 +49,9 @@ internal class EnemyMovement : MonoBehaviour
     private bool searching = false;
     private float autoSpeed = 0.05f;
     private bool f_Pushed;
-
+    Collider[] hitColliders;
     internal Quaternion startRotation;
+    LocationOnTheMap neighbour_1;
 
     private void Awake()
     {
@@ -194,7 +195,7 @@ internal class EnemyMovement : MonoBehaviour
             //    Debug.Log("opaaaaaaaaaaaaaaaaaaaaaaa");
             //    continue;
             //}
-
+            neighbour_1 = neighbour;
             bool ifCollidesWall = Physics2D.OverlapBox(new Vector2(neighbour.x, neighbour.y), new Vector3(1, 1, 1), 90, wallLayer);
             bool ifCollidesPath = Physics2D.OverlapBox(new Vector2(neighbour.x, neighbour.y), new Vector3(1, 1, 1), 90, pathLayer);
             //Debug.Log(colliders);
@@ -243,25 +244,26 @@ internal class EnemyMovement : MonoBehaviour
             float H = Vector2.Distance(neighbour.ToVector(), goalNode.location.ToVector());
             float G = Vector2.Distance(thisNode.location.ToVector(), neighbour.ToVector()) + thisNode.G;
             float F = G + H;
-            Collider[] hitColliders = Physics.OverlapSphere(neighbour.ToVector(), 0.2f, pathLayer);
-            if (!IfNeighbourExist(neighbour, G, H, F, thisNode) || !CheckIfExistInClosedList(neighbour, G, H, F, thisNode) || hitColliders.Length == 0)
+            hitColliders = Physics.OverlapSphere(neighbour.ToVector(), 0.2f, pathLayer);
+
+            if (!IfNeighbourExist(neighbour, G, H, F, thisNode) || !CheckIfExistInClosedList(neighbour, G, H, F, thisNode))
             {
                 //GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), transform.rotation * Quaternion.Euler(0f, 0f, 0f));
-
-                GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), Quaternion.identity);
-
-                TextMesh[] values = pathBlock.GetComponentsInChildren<TextMesh>();
-                values[0].text = "G: " + G.ToString("0.0");
-                values[1].text = "H: " + H.ToString("0.0");
-                values[2].text = "F: " + F.ToString("0.0");
-
-                if (!UpdateMarker(neighbour, G, H, F, thisNode))
+                if (hitColliders.Length == 0)
                 {
-                    open.Add(new PathMarker(neighbour, G, H, F, pathBlock, thisNode));
-                }
+                    GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), Quaternion.identity);
+
+                    TextMesh[] values = pathBlock.GetComponentsInChildren<TextMesh>();
+                    values[0].text = "G: " + G.ToString("0.0");
+                    values[1].text = "H: " + H.ToString("0.0");
+                    values[2].text = "F: " + F.ToString("0.0");
+
+                    if (!UpdateMarker(neighbour, G, H, F, thisNode))
+                    {
+                        open.Add(new PathMarker(neighbour, G, H, F, pathBlock, thisNode));
+                    }
+                }            
             }
-
-
         }
 
         if (startMarkerToClosed == false)
@@ -519,7 +521,7 @@ internal class EnemyMovement : MonoBehaviour
             this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
             this.gameObject.transform.Translate(speed * Time.deltaTime, 0, 0);
-
+           
             //Debug.DrawRay(start.transform.position, direction, Color.red);
             //Debug.DrawRay(start.transform.position, rotatedVectorToTarget, Color.green);
             //Debug.Log("The quaternion -  " + targetRotation);
@@ -530,21 +532,23 @@ internal class EnemyMovement : MonoBehaviour
             //Debug.DrawRay(start.transform.position, Vector3.forward * 5, Color.white);
         }
     }
-    //private void OnTriggerStay2D(Collider2D otherObject)
-    //{
-    //    int layerName = LayerMask.NameToLayer("GroundLayer");
-    //    if (otherObject.gameObject.layer == layerName)
-    //    {
-    //        f_Pushed = false;
-    //        done = true;
-    //        searching = false;
+    private void OnTriggerEnter2D(Collider2D otherObject)
+    {
+        int layerName = LayerMask.NameToLayer("GroundLayer");
+        if (otherObject.gameObject.layer == layerName)
+        {
+            maze.MarkTheGround();
+            f_Pushed = false;
+            done = true;
+            searching = false;
 
-    //        BeginSearch();
+            BeginSearch();
 
-    //        if (!done)
-    //        {
-    //            searching = true;
-    //        }
-    //    }
-    //}
+            if (!done)
+            {
+                searching = true;
+            }
+            Debug.Log("How many tim,es");
+        }
+    }
 }
