@@ -52,6 +52,7 @@ internal class EnemyMovement : MonoBehaviour
     Collider[] hitColliders;
     internal Quaternion startRotation;
     LocationOnTheMap neighbour_1;
+    private List<Collider2D> mapGround;
 
     private void Awake()
     {
@@ -61,6 +62,7 @@ internal class EnemyMovement : MonoBehaviour
         //Debug.Log("maze = " + maze == null);
         //Debug.Log("end = " + end == null);
         //Debug.Log("backGround = " + backGround == null);
+        mapGround = new List<Collider2D>();
     }
 
     // Start is called before the first frame update
@@ -73,7 +75,7 @@ internal class EnemyMovement : MonoBehaviour
 
         //objectWidth = mainCamera.transform.GetComponent<SpriteRenderer>().bounds.extents.x; //extents = size of width / 2
         //objectHeight = mainCamera.transform.GetComponent<SpriteRenderer>().bounds.extents.y; //extents = size of height / 2
-        Debug.Log("width = " + objectWidth + " - height = " + objectHeight);
+        //Debug.Log("width = " + objectWidth + " - height = " + objectHeight);
         startRotation = this.gameObject.transform.rotation;
         //index = this.transform.GetSiblingIndex();
         waypoints = new List<GameObject>();
@@ -521,7 +523,7 @@ internal class EnemyMovement : MonoBehaviour
             this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
             this.gameObject.transform.Translate(speed * Time.deltaTime, 0, 0);
-           
+
             //Debug.DrawRay(start.transform.position, direction, Color.red);
             //Debug.DrawRay(start.transform.position, rotatedVectorToTarget, Color.green);
             //Debug.Log("The quaternion -  " + targetRotation);
@@ -530,12 +532,14 @@ internal class EnemyMovement : MonoBehaviour
             //Debug.Log("Forward vector " + Vector3.forward);
             //Debug.DrawRay(start.transform.position, Vector3.up * 5, Color.yellow);
             //Debug.DrawRay(start.transform.position, Vector3.forward * 5, Color.white);
+            Debug.DrawRay(this.transform.position, Vector2.up, Color.red);
         }
     }
-    private void OnTriggerEnter2D(Collider2D otherObject)
+    private void FixedUpdate()
     {
-        int layerName = LayerMask.NameToLayer("GroundLayer");
-        if (otherObject.gameObject.layer == layerName)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1f, wallLayer);
+
+        if (hit.collider != null && !mapGround.Contains(hit.collider))
         {
             maze.MarkTheGround();
             f_Pushed = false;
@@ -549,6 +553,27 @@ internal class EnemyMovement : MonoBehaviour
                 searching = true;
             }
             Debug.Log("How many tim,es");
+            mapGround.Add(hit.collider);
         }
     }
+
+    //private void OnTriggerEnter2D(Collider2D otherObject)
+    //{
+    //    int layerName = LayerMask.NameToLayer("GroundLayer");
+    //    if (otherObject.gameObject.layer == layerName)
+    //    {
+    //        maze.MarkTheGround();
+    //        f_Pushed = false;
+    //        done = true;
+    //        searching = false;
+
+    //        BeginSearch();
+
+    //        if (!done)
+    //        {
+    //            searching = true;
+    //        }
+    //        Debug.Log("How many tim,es");
+    //    }
+    //}
 }
