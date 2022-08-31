@@ -49,9 +49,11 @@ internal class EnemyMovement : MonoBehaviour
     private bool searching = false;
     private float autoSpeed = 0.05f;
     private bool f_Pushed;
+    
     Collider[] hitColliders;
     internal Quaternion startRotation;
     LocationOnTheMap neighbour_1;
+    private List<GameObject> groundObjects;
     private List<Collider2D> mapGround;
 
     private void Awake()
@@ -63,6 +65,7 @@ internal class EnemyMovement : MonoBehaviour
         //Debug.Log("end = " + end == null);
         //Debug.Log("backGround = " + backGround == null);
         mapGround = new List<Collider2D>();
+        groundObjects = new List<GameObject>();
     }
 
     // Start is called before the first frame update
@@ -87,6 +90,11 @@ internal class EnemyMovement : MonoBehaviour
         tracker.transform.rotation = this.gameObject.transform.rotation;
         tracker.name = tracker.name+ this.gameObject.transform.GetSiblingIndex();
         f_Pushed = false;
+        GameObject.FindGameObjectsWithTag("Ground").ToList().ForEach(o => mapGround.Add(o.GetComponent<Collider2D>()));
+        //foreach (GameObject obj in groundObjects)
+        //{
+        //    mapGround.Add(obj.GetComponent<Collider2D>());
+        //}
     }
 
     private void OnEnable()
@@ -532,13 +540,16 @@ internal class EnemyMovement : MonoBehaviour
             //Debug.Log("Forward vector " + Vector3.forward);
             //Debug.DrawRay(start.transform.position, Vector3.up * 5, Color.yellow);
             //Debug.DrawRay(start.transform.position, Vector3.forward * 5, Color.white);
-            Debug.DrawRay(this.transform.position, Vector2.up, Color.red);
+            Debug.DrawRay(this.transform.position, this.transform.right * 2, Color.red);
         }
     }
     private void FixedUpdate()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1f, wallLayer);
-
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, 2f, wallLayer);
+        if (hit.collider != null)
+        {
+            Debug.Log("collders name = " + hit.collider.name);
+        }
         if (hit.collider != null && !mapGround.Contains(hit.collider))
         {
             maze.MarkTheGround();
