@@ -55,6 +55,7 @@ internal class EnemyMovement : MonoBehaviour
     LocationOnTheMap neighbour_1;
     private List<GameObject> groundObjects;
     private List<Collider2D> mapGround;
+    internal PlacePlatformHandler placePlatformButton;
 
     private void Awake()
     {
@@ -91,6 +92,8 @@ internal class EnemyMovement : MonoBehaviour
         tracker.name = tracker.name+ this.gameObject.transform.GetSiblingIndex();
         f_Pushed = false;
         GameObject.FindGameObjectsWithTag("Ground").ToList().ForEach(o => mapGround.Add(o.GetComponent<Collider2D>()));
+        placePlatformButton = GameObject.FindGameObjectWithTag("PlacePlatform").GetComponent<PlacePlatformHandler>();
+        Debug.Log("placePlatformButton found = " + placePlatformButton == null);
         //foreach (GameObject obj in groundObjects)
         //{
         //    mapGround.Add(obj.GetComponent<Collider2D>());
@@ -542,29 +545,44 @@ internal class EnemyMovement : MonoBehaviour
             //Debug.DrawRay(start.transform.position, Vector3.forward * 5, Color.white);
             Debug.DrawRay(this.transform.position, this.transform.right * 2, Color.red);
         }
+
+        if (placePlatformButton != null && placePlatformButton.putPlatformClicked == true)
+        {
+            Debug.Log("casdadsadas");
+
+            Re_Search();
+
+        }
+
     }
     private void FixedUpdate()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, 2f, wallLayer);
-        if (hit.collider != null)
-        {
-            Debug.Log("collders name = " + hit.collider.name);
-        }
+        //if (hit.collider != null)
+        //{
+        //    Debug.Log("collders name = " + hit.collider.name);
+        //}
         if (hit.collider != null && !mapGround.Contains(hit.collider))
         {
-            maze.MarkTheGround();
-            f_Pushed = false;
-            done = true;
-            searching = false;
-
-            BeginSearch();
-
-            if (!done)
-            {
-                searching = true;
-            }
-            Debug.Log("How many tim,es");
+            Re_Search();
             mapGround.Add(hit.collider);
+
+        }
+
+    }
+
+    private void Re_Search()
+    {
+        maze.MarkTheGround();
+        f_Pushed = false;
+        done = true;
+        searching = false;
+
+        BeginSearch();
+
+        if (!done)
+        {
+            searching = true;
         }
     }
 
