@@ -6,6 +6,7 @@ public class SkillsController : MonoBehaviour
 {
     internal PlacePlatformHandler placePlatformButton;
     [SerializeField] private GameObject platformPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,8 +20,7 @@ public class SkillsController : MonoBehaviour
         {
             if (placePlatformButton.putPlatformClicked)
             {
-
-                placePlatformButton.putPlatformClicked = false;
+                //placePlatformButton.putPlatformClicked = false;
                 GameObject platform = Instantiate(platformPrefab, this.transform.position, Quaternion.identity);
 
             }

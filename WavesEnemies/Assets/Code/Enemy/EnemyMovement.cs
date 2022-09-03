@@ -93,7 +93,7 @@ internal class EnemyMovement : MonoBehaviour
         f_Pushed = false;
         GameObject.FindGameObjectsWithTag("Ground").ToList().ForEach(o => mapGround.Add(o.GetComponent<Collider2D>()));
         placePlatformButton = GameObject.FindGameObjectWithTag("PlacePlatform").GetComponent<PlacePlatformHandler>();
-        Debug.Log("placePlatformButton found = " + placePlatformButton == null);
+        //Debug.Log("placePlatformButton found = " + placePlatformButton == null);
         //foreach (GameObject obj in groundObjects)
         //{
         //    mapGround.Add(obj.GetComponent<Collider2D>());
@@ -177,7 +177,7 @@ internal class EnemyMovement : MonoBehaviour
         closed.Clear();
         open.Add(startNode);
         lastPosition = startNode;
-        //Debug.Log("last position x = " + lastPosition.location.x + " - last position y = " + lastPosition.location.y);
+        Debug.Log("how many times begin search is played = ");
 
     }
 
@@ -471,6 +471,17 @@ internal class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (placePlatformButton != null && placePlatformButton.putPlatformClicked == true)
+        {
+            Debug.Log("putPlatformClicked = " + placePlatformButton.putPlatformClicked);
+
+            Re_Search();
+            placePlatformButton.putPlatformClicked = false;
+        }
+        //if (open != null)
+        //{
+        //    Debug.Log("open count = " + open.Count);
+        //}
         //if (Input.GetKeyDown(KeyCode.LeftAlt))
         //{
         //    BeginSearch();
@@ -546,13 +557,7 @@ internal class EnemyMovement : MonoBehaviour
             Debug.DrawRay(this.transform.position, this.transform.right * 2, Color.red);
         }
 
-        if (placePlatformButton != null && placePlatformButton.putPlatformClicked == true)
-        {
-            Debug.Log("casdadsadas");
 
-            Re_Search();
-
-        }
 
     }
     private void FixedUpdate()
