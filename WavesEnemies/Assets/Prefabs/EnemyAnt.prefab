@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3934560469314609548}
   - component: {fileID: 487266252677979497}
   - component: {fileID: 117062848}
+  - component: {fileID: 5219432936359820439}
   m_Layer: 0
   m_Name: EnemyAnt
   m_TagString: Enemy
@@ -179,3 +180,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5219432936359820439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934560469314609648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 791278662d24a9a449f85819378ed10c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -177,7 +177,7 @@ internal class EnemyMovement : MonoBehaviour
         closed.Clear();
         open.Add(startNode);
         lastPosition = startNode;
-        Debug.Log("how many times begin search is played = ");
+        //Debug.Log("how many times begin search is played = ");
 
     }
 
@@ -192,7 +192,7 @@ internal class EnemyMovement : MonoBehaviour
         ///float unityDistance = Vector3.Distance(thisNode.location.ToVector(), goalObject.transform.position);
         float unityDistance = Vector3.Distance(thisNode.location.ToVector(), end.transform.position);
         //Debug.Log("distance kva e we = " + unityDistance);
-        if (unityDistance < 0.5f)
+        if (unityDistance < 1f)
         {
             done = true;
             searching = false;
