@@ -30,7 +30,7 @@ internal class EnemyMovement : MonoBehaviour
     private PathMarker goalNode;
 
     private PathMarker lastPosition;
-    private bool done = false;
+    internal bool done = false;
     private bool startMarkerToClosed = false;
     //[SerializeField] protected Rigidbody2D rigidBody;
     [SerializeField] private float speed;
@@ -46,7 +46,7 @@ internal class EnemyMovement : MonoBehaviour
     private float direction_X;
     private float direction_Y;
 
-    private bool searching = false;
+    internal bool searching = false;
     private float autoSpeed = 0.05f;
     private bool f_Pushed;
     

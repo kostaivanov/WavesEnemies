@@ -18,14 +18,14 @@ public class AnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("movement.placePlatformButton = " + movement.placePlatformButton.putPlatformClicked);
+        Debug.Log("done = " + movement.searching);
         this.AnimationStateSwitch();
         animator.SetInteger("state", (int)state);
     }
 
     protected void AnimationStateSwitch()
     {
-        if (movement.placePlatformButton == true)
+        if (movement.searching == false)
         {
                 state = AnimationState.moving;
         }
