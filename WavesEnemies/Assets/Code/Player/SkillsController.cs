@@ -1,27 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SkillsController : MonoBehaviour
 {
-    internal PlacePlatformHandler placePlatformButton;
-    [SerializeField] private GameObject platformPrefab;
+    internal List<PlacePlatformHandler> placePlatformButtons;
+    [SerializeField] private List<GameObject> platformPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
-        placePlatformButton = GameObject.FindGameObjectWithTag("PlacePlatform").GetComponent<PlacePlatformHandler>();
+        placePlatformButtons = new List<PlacePlatformHandler>();
+         GameObject.FindGameObjectsWithTag("PlacePlatform").ToList().ForEach(p => placePlatformButtons.Add(p.GetComponent<PlacePlatformHandler>()));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (placePlatformButton != null)
+        if (placePlatformButtons != null)
         {
-            if (placePlatformButton.putPlatformClicked)
+            if (placePlatformButtons.Any(p =>p.putPlatformClicked))
             {
                 //placePlatformButton.putPlatformClicked = false;
-                GameObject platform = Instantiate(platformPrefab, this.transform.position, Quaternion.identity);
+                string name = placePlatformButtons.FirstOrDefault(p => p.putPlatformClicked).name;
+                if (name.StartsWith("H"))
+                {
+                    GameObject platform = Instantiate(platformPrefab[0], this.transform.position, Quaternion.identity);
+                }
+                else
+                {
+                    GameObject platform = Instantiate(platformPrefab[1], this.transform.position, Quaternion.identity);
+                }
 
             }
         }
