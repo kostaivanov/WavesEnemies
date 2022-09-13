@@ -11,7 +11,7 @@ public class SkillsController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        placePlatformButtons = new List<PlacePlatformHandler>();
+         placePlatformButtons = new List<PlacePlatformHandler>();
          GameObject.FindGameObjectsWithTag("PlacePlatform").ToList().ForEach(p => placePlatformButtons.Add(p.GetComponent<PlacePlatformHandler>()));
     }
 

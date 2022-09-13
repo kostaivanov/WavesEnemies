@@ -55,7 +55,7 @@ internal class EnemyMovement : MonoBehaviour
     LocationOnTheMap neighbour_1;
     private List<GameObject> groundObjects;
     private List<Collider2D> mapGround;
-    internal PlacePlatformHandler placePlatformButton;
+    internal List<PlacePlatformHandler> placePlatformButtons;
 
     private void Awake()
     {
@@ -92,7 +92,8 @@ internal class EnemyMovement : MonoBehaviour
         tracker.name = tracker.name+ this.gameObject.transform.GetSiblingIndex();
         f_Pushed = false;
         GameObject.FindGameObjectsWithTag("Ground").ToList().ForEach(o => mapGround.Add(o.GetComponent<Collider2D>()));
-        placePlatformButton = GameObject.FindGameObjectWithTag("PlacePlatform").GetComponent<PlacePlatformHandler>();
+        placePlatformButtons = new List<PlacePlatformHandler>();
+        GameObject.FindGameObjectsWithTag("PlacePlatform").ToList().ForEach(p => placePlatformButtons.Add(p.GetComponent<PlacePlatformHandler>()));
         //Debug.Log("placePlatformButton found = " + placePlatformButton == null);
         //foreach (GameObject obj in groundObjects)
         //{
@@ -471,12 +472,16 @@ internal class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (placePlatformButton != null && placePlatformButton.putPlatformClicked == true)
+        if (placePlatformButtons != null)
         {
-            Debug.Log("putPlatformClicked = " + placePlatformButton.putPlatformClicked);
-
-            Re_Search();
-            placePlatformButton.putPlatformClicked = false;
+            foreach (PlacePlatformHandler p in placePlatformButtons)
+            {
+                if (p.putPlatformClicked == true)
+                {
+                    Re_Search();
+                    p.putPlatformClicked = false;
+                }
+            }
         }
         //if (open != null)
         //{
