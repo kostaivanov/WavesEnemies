@@ -158,7 +158,7 @@ MonoBehaviour:
   pathLayer:
     serializedVersion: 2
     m_Bits: 128
-  speed: 1
+  speed: 1.5
   rotationSpeed: 2
 --- !u!95 &117062848
 Animator:

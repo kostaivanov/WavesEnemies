@@ -20,19 +20,21 @@ public class SkillsController : MonoBehaviour
     {
         if (placePlatformButtons != null)
         {
-            if (placePlatformButtons.Any(p =>p.putPlatformClicked))
+            foreach (PlacePlatformHandler p in placePlatformButtons)
             {
-                //placePlatformButton.putPlatformClicked = false;
-                string name = placePlatformButtons.FirstOrDefault(p => p.putPlatformClicked).name;
-                if (name.StartsWith("H"))
+                if (p.putPlatformClicked == true)
                 {
-                    GameObject platform = Instantiate(platformPrefab[0], this.transform.position, Quaternion.identity);
-                }
-                else
-                {
-                    GameObject platform = Instantiate(platformPrefab[1], this.transform.position, Quaternion.identity);
-                }
+                    string name = p.gameObject.name;
 
+                    if (name.StartsWith("H"))
+                    {
+                        GameObject platform = Instantiate(platformPrefab[0], this.transform.position, Quaternion.identity);
+                    }
+                    else
+                    {
+                        GameObject platform = Instantiate(platformPrefab[1], this.transform.position, Quaternion.identity);
+                    }
+                }
             }
         }
     }
