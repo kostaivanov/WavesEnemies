@@ -29,35 +29,38 @@ public class SkillsController : MonoBehaviour
 
                     if (name.StartsWith("H"))
                     {
-                        GameObject platform = Instantiate(platformPrefab[0], this.transform.position, Quaternion.identity);
-                        platform.GetComponent<SpriteRenderer>().enabled = false;
-                        bool isTouchingGround = Physics2D.IsTouchingLayers(platform.GetComponent<BoxCollider2D>(), groundLayer);
-                        Debug.Log("is touching = " + isTouchingGround);
-                        if (!isTouchingGround)
-                        {
-                            platform.GetComponent<SpriteRenderer>().enabled = true;
-                        }
-                        else
-                        {
-                            Destroy(platform);
-                        }
+                        BoxCollider2D collider1 = platformPrefab[0].GetComponent<BoxCollider2D>();
+                        //Collider2D[] otherColliders = Physics2D.OverlapAreaAll(this.gameObject.GetComponent<Collider2D>().bounds.min, collider1.bounds.max, groundLayer);
+                        Collider2D[] otherColliders = Physics2D.OverlapBoxAll(this.gameObject.transform.position, collider1.size, 0, groundLayer);
 
+                        //platform.GetComponent<SpriteRenderer>().enabled = false;
+                        if (otherColliders.Length == 0)
+                        {
+                            GameObject platform = Instantiate(platformPrefab[0], this.transform.position, Quaternion.identity);
+                        }
+                        if (otherColliders.Length > 0)
+                        {
+                            Debug.Log(otherColliders[0]);
+                        }
                     }
                     else
                     {
                         GameObject platform = Instantiate(platformPrefab[1], this.transform.position, Quaternion.identity);
                         platform.GetComponent<SpriteRenderer>().enabled = false;
-                        bool isTouchingGround = Physics2D.IsTouchingLayers(platform.GetComponent<BoxCollider2D>(), groundLayer);
+                        //BoxCollider2D collider1 = platform.GetComponent<BoxCollider2D>();
+                        //bool isTouchingGround = Physics2D.IsTouchingLayers(collider1);
 
-                        if (!isTouchingGround)
-                        {
-                            platform.GetComponent<SpriteRenderer>().enabled = true;
-                        }
-                        else
-                        {
-                            Destroy(platform);
-                        }
+                        //if (!isTouchingGround)
+                        //{
+                        //    platform.GetComponent<SpriteRenderer>().enabled = true;
+                        //}
+                        //else
+                        //{
+                        //    Destroy(platform);
+                        //}
                     }
+
+                    p.putPlatformClicked = false;
                 }
             }
         }

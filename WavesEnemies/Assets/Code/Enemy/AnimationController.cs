@@ -18,7 +18,7 @@ public class AnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("done = " + movement.searching);
+        //Debug.Log("done = " + movement.searching);
         this.AnimationStateSwitch();
         animator.SetInteger("state", (int)state);
     }

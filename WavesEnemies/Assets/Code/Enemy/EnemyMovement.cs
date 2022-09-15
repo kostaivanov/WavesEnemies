@@ -476,10 +476,10 @@ internal class EnemyMovement : MonoBehaviour
         {
             foreach (PlacePlatformHandler p in placePlatformButtons)
             {
-                if (p.putPlatformClicked == true)
+                if (p.searchPathAgain == true)
                 {
                     Re_Search();
-                    p.putPlatformClicked = false;
+                    p.searchPathAgain = false;
                 }
             }
         }

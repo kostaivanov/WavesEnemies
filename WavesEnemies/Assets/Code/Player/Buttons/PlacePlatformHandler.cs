@@ -5,9 +5,12 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class PlacePlatformHandler : MonoBehaviour, IPointerDownHandler
 {
-    internal bool putPlatformClicked;
+    internal bool putPlatformClicked = false;
+    internal bool searchPathAgain = false;
+
     public void OnPointerDown(PointerEventData eventData)
     {
         putPlatformClicked = true;
+        searchPathAgain = true;
     }
 }
