@@ -8,7 +8,9 @@ public class PlatformController : MonoBehaviour
     {
         if (otherObject.gameObject.tag == "Ground")
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
+           
         }
+        Debug.Log("Detecting = " + otherObject.gameObject.name);
     }
 }

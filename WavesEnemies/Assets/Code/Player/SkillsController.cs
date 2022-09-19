@@ -8,7 +8,7 @@ public class SkillsController : MonoBehaviour
     internal List<PlacePlatformHandler> placePlatformButtons;
     [SerializeField] private List<GameObject> platformPrefab;
     [SerializeField] private LayerMask groundLayer;
-
+    private ContactFilter2D interactFilter;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,37 +30,36 @@ public class SkillsController : MonoBehaviour
                     if (name.StartsWith("H"))
                     {
                         BoxCollider2D collider1 = platformPrefab[0].GetComponent<BoxCollider2D>();
+                        SpriteRenderer sprite = platformPrefab[0].GetComponent<SpriteRenderer>();
                         //Collider2D[] otherColliders = Physics2D.OverlapAreaAll(this.gameObject.GetComponent<Collider2D>().bounds.min, collider1.bounds.max, groundLayer);
-                        Collider2D[] otherColliders = Physics2D.OverlapBoxAll(this.gameObject.transform.position, collider1.size, 0, groundLayer);
+                        //Collider2D[] otherColliders = Physics2D.OverlapBoxAll(this.gameObject.transform.position, sprite.bounds.size, 0, groundLayer);
+                        bool collide = Physics2D.OverlapBox(this.gameObject.transform.position, sprite.bounds.size, 0, groundLayer);
+                        List<Collider2D> results = new List<Collider2D>();
 
+
+                        //interactFilter.SetLayerMask(groundLayer);
                         //platform.GetComponent<SpriteRenderer>().enabled = false;
-                        if (otherColliders.Length == 0)
+                        //  if (otherColliders.Length == 0)
+                        if (collide == false)
                         {
                             GameObject platform = Instantiate(platformPrefab[0], this.transform.position, Quaternion.identity);
-                        }
-                        if (otherColliders.Length > 0)
-                        {
-                            Debug.Log(otherColliders[0]);
                         }
                     }
                     else
                     {
-                        GameObject platform = Instantiate(platformPrefab[1], this.transform.position, Quaternion.identity);
-                        platform.GetComponent<SpriteRenderer>().enabled = false;
-                        //BoxCollider2D collider1 = platform.GetComponent<BoxCollider2D>();
-                        //bool isTouchingGround = Physics2D.IsTouchingLayers(collider1);
+                        BoxCollider2D collider1 = platformPrefab[1].GetComponent<BoxCollider2D>();
+                        SpriteRenderer sprite = platformPrefab[1].GetComponent<SpriteRenderer>();
+                        bool collide = Physics2D.OverlapBox(this.gameObject.transform.position, sprite.bounds.size, 0, groundLayer);
+                        Debug.Log(sprite.bounds.size + " - overlapping = " + collide);
 
-                        //if (!isTouchingGround)
-                        //{
-                        //    platform.GetComponent<SpriteRenderer>().enabled = true;
-                        //}
-                        //else
-                        //{
-                        //    Destroy(platform);
-                        //}
+                        if (collide == false)
+                        {
+                            GameObject platform = Instantiate(platformPrefab[1], this.transform.position, Quaternion.identity);
+                        }
                     }
 
                     p.putPlatformClicked = false;
+                    
                 }
             }
         }
