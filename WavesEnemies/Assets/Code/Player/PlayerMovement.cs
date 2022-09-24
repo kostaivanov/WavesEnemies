@@ -36,6 +36,7 @@ internal class PlayerMovement : PlayerComponents
         {
             moveKeyIsPressed = true;
         }
+
         if (moveKeyIsPressed == true)
         {
             ProcessInput();
@@ -52,7 +53,11 @@ internal class PlayerMovement : PlayerComponents
     {
         this.AnimationStateSwitch();
         base.animator.SetInteger("state", (int)state);
-        Animate();
+        //Animate();
+
+        Debug.Log("state = " + state);
+        Debug.Log("move X = " + moveDirection.x);
+        Debug.Log("move Y = " + moveDirection.y);
     }
 
     private void ProcessInput()
@@ -82,6 +87,7 @@ internal class PlayerMovement : PlayerComponents
             if (Mathf.Abs(base.rigidBody.velocity.x) > minimumVelocity || Mathf.Abs(base.rigidBody.velocity.y) > minimumVelocity)
             {
                 state = AnimationState.moving;
+                Animate();
             }
         }
         else
