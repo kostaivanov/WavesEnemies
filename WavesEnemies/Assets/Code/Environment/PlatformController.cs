@@ -11,6 +11,6 @@ public class PlatformController : MonoBehaviour
             //Destroy(this.gameObject);
            
         }
-        Debug.Log("Detecting = " + otherObject.gameObject.name);
+        //Debug.Log("Detecting = " + otherObject.gameObject.name);
     }
 }

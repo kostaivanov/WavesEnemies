@@ -20,28 +20,29 @@ internal class PlayerMovement : PlayerComponents
     private Vector2 moveDirection;
     private Vector3 aim;
     private Vector2 lastMoveDirection;
-    internal bool moveKeyIsPressed;
+    //internal bool moveKeyIsPressed;
+    float move_X;
+    float move_Y;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        moveKeyIsPressed = false;
     }
 
     // Update is called once per frame
     private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
-        {
-            moveKeyIsPressed = true;
-        }
-
-        if (moveKeyIsPressed == true)
+    {     
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
             ProcessInput();
         }
-        //aim = new Vector3(GetAX)
+        else
+        {
+            move_X = 0;
+            move_Y = 0;
+            rigidBody.velocity = Vector2.zero;
+        }
     }
 
     private void FixedUpdate()
@@ -54,16 +55,12 @@ internal class PlayerMovement : PlayerComponents
         this.AnimationStateSwitch();
         base.animator.SetInteger("state", (int)state);
         //Animate();
-
-        Debug.Log("state = " + state);
-        Debug.Log("move X = " + moveDirection.x);
-        Debug.Log("move Y = " + moveDirection.y);
     }
 
     private void ProcessInput()
     {
-        float move_X = Input.GetAxisRaw("Horizontal");
-        float move_Y = Input.GetAxisRaw("Vertical");
+        move_X = Input.GetAxisRaw("Horizontal");
+        move_Y = Input.GetAxisRaw("Vertical");
 
         if ((move_X == 0 && move_Y == 0) && moveDirection.x != 0 || moveDirection.y != 0)
         {
@@ -71,13 +68,14 @@ internal class PlayerMovement : PlayerComponents
         }
 
         moveDirection = new Vector2(move_X, move_Y).normalized;
-        Move();
-        
+        Move();       
     }
 
     private void Move()
     {
-        rigidBody.velocity = new Vector2(moveDirection.x * movingSpeed, moveDirection.y * movingSpeed);
+        Debug.Log(moveDirection);
+
+        rigidBody.velocity = new Vector2(moveDirection.normalized.x * movingSpeed, moveDirection.normalized.y * movingSpeed);
     }
 
     protected void AnimationStateSwitch()
@@ -104,6 +102,5 @@ internal class PlayerMovement : PlayerComponents
 
         //animator.SetFloat("AnimLastMoveX", lastMoveDirection.x);
         //animator.SetFloat("AnimLastMoveY", lastMoveDirection.y);
-
     }
 }
