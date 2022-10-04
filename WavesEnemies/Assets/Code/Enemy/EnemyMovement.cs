@@ -454,7 +454,7 @@ internal class EnemyMovement : MonoBehaviour
             return;
         }
 
-        if (currentWP > 0 && Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 0.05f)
+        if (currentWP > 0 && Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 0.5f)
         {
             currentWP--;
         }

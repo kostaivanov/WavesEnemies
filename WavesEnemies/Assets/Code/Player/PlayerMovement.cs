@@ -41,13 +41,9 @@ internal class PlayerMovement : PlayerComponents
         {
             move_X = 0;
             move_Y = 0;
+            Animate(lastMoveDirection);
             rigidBody.velocity = Vector2.zero;
         }
-    }
-
-    private void FixedUpdate()
-    {
-
     }
 
     private void LateUpdate()
@@ -64,7 +60,7 @@ internal class PlayerMovement : PlayerComponents
 
         if ((move_X == 0 && move_Y == 0) && moveDirection.x != 0 || moveDirection.y != 0)
         {
-            lastMoveDirection = moveDirection;
+            lastMoveDirection = moveDirection;       
         }
 
         moveDirection = new Vector2(move_X, move_Y).normalized;
@@ -73,8 +69,6 @@ internal class PlayerMovement : PlayerComponents
 
     private void Move()
     {
-        Debug.Log(moveDirection);
-
         rigidBody.velocity = new Vector2(moveDirection.normalized.x * movingSpeed, moveDirection.normalized.y * movingSpeed);
     }
 
@@ -85,7 +79,7 @@ internal class PlayerMovement : PlayerComponents
             if (Mathf.Abs(base.rigidBody.velocity.x) > minimumVelocity || Mathf.Abs(base.rigidBody.velocity.y) > minimumVelocity)
             {
                 state = AnimationState.moving;
-                Animate();
+                Animate(moveDirection);
             }
         }
         else
@@ -94,10 +88,10 @@ internal class PlayerMovement : PlayerComponents
         }
     }
 
-    private void Animate()
+    private void Animate(Vector2 direction)
     {
-        animator.SetFloat("MoveX", moveDirection.x);
-        animator.SetFloat("MoveY", moveDirection.y);
+        animator.SetFloat("MoveX", direction.x);
+        animator.SetFloat("MoveY", direction.y);
         //animator.SetFloat("AnimMoveMagnitude", moveDirection.magnitude);
 
         //animator.SetFloat("AnimLastMoveX", lastMoveDirection.x);
