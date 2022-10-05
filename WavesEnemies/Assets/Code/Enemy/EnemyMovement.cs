@@ -448,13 +448,13 @@ internal class EnemyMovement : MonoBehaviour
     }
     private void ProgressTracker()
     {
-        if (Vector3.Distance(tracker.transform.position, this.gameObject.transform.position) > 0.5f)
+        if (Vector3.Distance(tracker.transform.position, this.gameObject.transform.position) > 1f)
         {
             //float dis = Vector3.Distance(tracker.transform.position, startObject.transform.position);
             return;
         }
 
-        if (currentWP > 0 && Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 0.5f)
+        if (currentWP > 0 && Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 1f)
         {
             currentWP--;
         }

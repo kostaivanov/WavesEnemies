@@ -44,6 +44,7 @@ internal class PlayerMovement : PlayerComponents
             Animate(lastMoveDirection);
             rigidBody.velocity = Vector2.zero;
         }
+        //Debug.Log(lastMoveDirection);
     }
 
     private void LateUpdate()
@@ -58,12 +59,17 @@ internal class PlayerMovement : PlayerComponents
         move_X = Input.GetAxisRaw("Horizontal");
         move_Y = Input.GetAxisRaw("Vertical");
 
-        if ((move_X == 0 && move_Y == 0) && moveDirection.x != 0 || moveDirection.y != 0)
+        //if ((move_X == 0 && move_Y == 0) && moveDirection.x != 0 || moveDirection.y != 0)
+        //{
+        //lastMoveDirection = moveDirection;       
+        //}
+        if (move_X == 0 && move_Y == 0)
         {
-            lastMoveDirection = moveDirection;       
+                 
         }
 
         moveDirection = new Vector2(move_X, move_Y).normalized;
+        lastMoveDirection = moveDirection;
         Move();       
     }
 
