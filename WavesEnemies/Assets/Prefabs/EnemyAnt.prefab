@@ -161,6 +161,7 @@ MonoBehaviour:
     m_Bits: 128
   speed: 1.5
   rotationSpeed: 2
+  trackerPrefab: {fileID: 8925948619824268598, guid: f29f2ff93171bae40b15582cfb748b7e, type: 3}
 --- !u!95 &117062848
 Animator:
   serializedVersion: 4

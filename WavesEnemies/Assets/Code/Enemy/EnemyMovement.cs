@@ -41,8 +41,8 @@ internal class EnemyMovement : MonoBehaviour
     [SerializeField] private float rotationSpeed = 2f;
 
     //public float lookAhead = 1f;
+    [SerializeField] internal GameObject trackerPrefab;
     internal GameObject tracker;
-
     private float direction_X;
     private float direction_Y;
 
@@ -84,9 +84,10 @@ internal class EnemyMovement : MonoBehaviour
         //index = this.transform.GetSiblingIndex();
         waypoints = new List<GameObject>();
 
-        tracker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        DestroyImmediate(tracker.GetComponent<Collider2D>());
-        tracker.GetComponent<MeshRenderer>().enabled = false;
+        //tracker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        tracker = Instantiate(trackerPrefab);
+        //DestroyImmediate(tracker.GetComponent<Collider2D>());
+        //tracker.GetComponent<MeshRenderer>().enabled = false;
         tracker.transform.position = this.gameObject.transform.position;
         tracker.transform.rotation = this.gameObject.transform.rotation;
         tracker.name = tracker.name+ this.gameObject.transform.GetSiblingIndex();
@@ -448,25 +449,28 @@ internal class EnemyMovement : MonoBehaviour
     }
     private void ProgressTracker()
     {
-        if (Vector3.Distance(tracker.transform.position, this.gameObject.transform.position) > 1f)
+        if (tracker != null)
         {
-            //float dis = Vector3.Distance(tracker.transform.position, startObject.transform.position);
-            return;
-        }
+            if (Vector3.Distance(tracker.transform.position, this.gameObject.transform.position) > 1f)
+            {
+                //float dis = Vector3.Distance(tracker.transform.position, startObject.transform.position);
+                return;
+            }
 
-        if (currentWP > 0 && Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 1f)
-        {
-            currentWP--;
-        }
+            if (currentWP > 0 && Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 1f)
+            {
+                currentWP--;
+            }
 
-        if (currentWP == 0 && Vector3.Distance(tracker.transform.position, end.transform.position) < 0.35f)
-        {
-            done = false;
-            f_Pushed = false;
-            //currentWP = waypoints.Count - 1;
-        }
-        tracker.transform.LookAt(waypoints[currentWP].transform);
-        tracker.transform.Translate(0, 0, (speed + 0.5f) * Time.deltaTime);
+            if (currentWP == 0 && Vector3.Distance(tracker.transform.position, end.transform.position) < 0.35f)
+            {
+                done = false;
+                f_Pushed = false;
+                //currentWP = waypoints.Count - 1;
+            }
+            tracker.transform.LookAt(waypoints[currentWP].transform, Vector3.up);
+            tracker.transform.Translate(0, 0, (speed + 0.5f) * Time.deltaTime);
+        }      
     }
 
     // Update is called once per frame
@@ -547,9 +551,11 @@ internal class EnemyMovement : MonoBehaviour
             Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * direction;
             Quaternion targetRotation = Quaternion.LookRotation(forward: Vector3.forward, upwards: rotatedVectorToTarget);
 
-            this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            this.gameObject.transform.localRotation = Quaternion.Slerp(this.gameObject.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-            this.gameObject.transform.Translate(speed * Time.deltaTime, 0, 0);
+            //this.gameObject.transform.Translate(speed * Time.deltaTime, 0, 0);
+            this.transform.localPosition = Vector3.MoveTowards(transform.localPosition, new Vector3(-300f, 0f, 0f), speed * Time.deltaTime);
+
 
             //Debug.DrawRay(start.transform.position, direction, Color.red);
             //Debug.DrawRay(start.transform.position, rotatedVectorToTarget, Color.green);
@@ -559,7 +565,7 @@ internal class EnemyMovement : MonoBehaviour
             //Debug.Log("Forward vector " + Vector3.forward);
             //Debug.DrawRay(start.transform.position, Vector3.up * 5, Color.yellow);
             //Debug.DrawRay(start.transform.position, Vector3.forward * 5, Color.white);
-            Debug.DrawRay(this.transform.position, this.transform.right * 2, Color.red);
+            //Debug.DrawRay(this.transform.position, this.transform.right * 2, Color.red);
         }
 
 

@@ -7,7 +7,7 @@ public class SpawnAnts : MonoBehaviour
     [SerializeField] internal float addToSpawnTime;
     internal float chanceSpawnRare = 0.5f;
     private float initialTimer;
-    private GameObject inGame;
+    //private GameObject inGame;
 
     private string[] antsNames = new string[] { "EnemyAnt" };
 
@@ -20,6 +20,7 @@ public class SpawnAnts : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(this.gameObject.name + " - position =  " + this.transform.position);
         //if (inGame == null)
         //{
         //    inGame = GameObject.FindGameObjectWithTag("InGame");
@@ -49,14 +50,15 @@ public class SpawnAnts : MonoBehaviour
 
         }
         GameObject obj = AntsPooler.current.GetPooledObject(typeObject);
-        //Debug.Log("obj  == null " + obj == null);
+
         if (obj == null)
         {
             return;
         }
-
-        obj.transform.position = this.transform.position;
-        obj.transform.rotation = this.transform.rotation;
+        Debug.Log("obj  == null ");
+        //obj.transform.SetParent(this.gameObject.transform);
+        //obj.transform.localPosition = this.transform.position;
+        //obj.transform.localRotation = this.transform.rotation;
         obj.SetActive(true);
     }
 }

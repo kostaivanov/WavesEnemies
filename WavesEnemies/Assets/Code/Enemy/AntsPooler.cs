@@ -9,7 +9,7 @@ public class AntsPooler : MonoBehaviour
     [SerializeField] private int pooledAmount;
     [SerializeField] private bool willGrow;
     internal List<GameObject> pooledObjects;
-    [SerializeField] internal GameObject parentInstantiateObject;
+    //[SerializeField] internal GameObject parentInstantiateObject;
 
     private void Awake()
     {
@@ -25,7 +25,16 @@ public class AntsPooler : MonoBehaviour
         {
             //GameObject obj = Instantiate(pooledObjectsArray[Random.Range(0, pooledObjectsArray.Count)]);
             GameObject obj_1 = Instantiate(objectsToBePooled[0]);
-            obj_1.transform.parent = parentInstantiateObject.transform;
+            //obj_1.transform.parent = parentInstantiateObject.transform;
+            //obj_1.transform.position = parentInstantiateObject.transform.position;
+            //obj_1.transform.rotation = parentInstantiateObject.transform.rotation;
+
+            //obj_1.transform.parent = this.gameObject.transform;
+            obj_1.transform.SetParent(this.gameObject.transform);
+
+            //obj_1.transform.position = this.gameObject.transform.position;
+            //obj_1.transform.rotation = this.gameObject.transform.rotation;
+
             obj_1.name = obj_1.name + obj_1.transform.GetSiblingIndex();
             obj_1.SetActive(false);
 
@@ -55,7 +64,7 @@ public class AntsPooler : MonoBehaviour
                 if (typeObject == objectsToBePooled[i].name)
                 {
                     GameObject obj = Instantiate(objectsToBePooled[i]);
-                    obj.transform.parent = parentInstantiateObject.transform;
+                    obj.transform.parent = this.gameObject.transform;
                     pooledObjects.Add(obj);
                     return obj;
                 }
