@@ -20,7 +20,7 @@ public class SpawnAnts : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(this.gameObject.name + " - position =  " + this.transform.position);
+        //Debug.Log(this.gameObject.name + " - position =  " + this.transform.position);
         //if (inGame == null)
         //{
         //    inGame = GameObject.FindGameObjectWithTag("InGame");

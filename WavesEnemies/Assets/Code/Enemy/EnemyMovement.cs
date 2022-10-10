@@ -468,8 +468,11 @@ internal class EnemyMovement : MonoBehaviour
                 f_Pushed = false;
                 //currentWP = waypoints.Count - 1;
             }
-            tracker.transform.LookAt(waypoints[currentWP].transform, Vector3.up);
-            tracker.transform.Translate(0, 0, (speed + 0.5f) * Time.deltaTime);
+            if (tracker != null && waypoints != null)
+            {
+                tracker.transform.LookAt(waypoints[currentWP].transform, Vector3.up);
+                tracker.transform.Translate(0, 0, (speed + 0.5f) * Time.deltaTime);
+            }
         }      
     }
 
@@ -487,33 +490,6 @@ internal class EnemyMovement : MonoBehaviour
                 }
             }
         }
-        //if (open != null)
-        //{
-        //    Debug.Log("open count = " + open.Count);
-        //}
-        //if (Input.GetKeyDown(KeyCode.LeftAlt))
-        //{
-        //    BeginSearch();
-        //}
-        //if (Input.GetKeyDown(KeyCode.L) && !done)
-        //{
-        //    searching = true;
-        //    //Search(lastPosition);
-        //}
-        //if (Input.GetKeyDown(KeyCode.C))
-        //{
-        //    foreach (PathMarker item in closed)
-        //    {
-        //        Debug.Log(item.F);
-        //    }
-        //}
-        //if (Input.GetKeyDown(KeyCode.O))
-        //{
-        //    foreach (PathMarker item in open)
-        //    {
-        //        Debug.Log(item.F);
-        //    }
-        //}
 
         if (searching == true)
         {
@@ -553,9 +529,7 @@ internal class EnemyMovement : MonoBehaviour
 
             this.gameObject.transform.localRotation = Quaternion.Slerp(this.gameObject.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-            //this.gameObject.transform.Translate(speed * Time.deltaTime, 0, 0);
-            this.transform.localPosition = Vector3.MoveTowards(transform.localPosition, new Vector3(-300f, 0f, 0f), speed * Time.deltaTime);
-
+            this.gameObject.transform.Translate(speed * Time.deltaTime, 0, 0);
 
             //Debug.DrawRay(start.transform.position, direction, Color.red);
             //Debug.DrawRay(start.transform.position, rotatedVectorToTarget, Color.green);
@@ -573,7 +547,7 @@ internal class EnemyMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, 2f, wallLayer);
+        RaycastHit2D hit = Physics2D.Raycast(this.transform.position, transform.right, 2f, wallLayer);
         //if (hit.collider != null)
         //{
         //    Debug.Log("collders name = " + hit.collider.name);

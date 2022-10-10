@@ -29,10 +29,10 @@ public class AntsPooler : MonoBehaviour
             //obj_1.transform.position = parentInstantiateObject.transform.position;
             //obj_1.transform.rotation = parentInstantiateObject.transform.rotation;
 
-            //obj_1.transform.parent = this.gameObject.transform;
-            obj_1.transform.SetParent(this.gameObject.transform);
+            obj_1.transform.parent = this.gameObject.transform;
+            //obj_1.transform.SetParent(this.gameObject.transform);
 
-            //obj_1.transform.position = this.gameObject.transform.position;
+            obj_1.transform.position = this.gameObject.transform.position;
             //obj_1.transform.rotation = this.gameObject.transform.rotation;
 
             obj_1.name = obj_1.name + obj_1.transform.GetSiblingIndex();
@@ -49,9 +49,11 @@ public class AntsPooler : MonoBehaviour
         {
             string[] prefabsFullName = pooledObjects[i].name.Split(new char[] { '(', ')' }, System.StringSplitOptions.RemoveEmptyEntries);
             string name = prefabsFullName[0];
-            //Debug.Log("name = " + name);
+            Debug.Log(this.gameObject.name + " = name = " + pooledObjects.Count);
             if (name == typeObject && !pooledObjects[i].activeInHierarchy)
             {
+                Debug.Log("how many");
+
                 return pooledObjects[i];
             }
         }
