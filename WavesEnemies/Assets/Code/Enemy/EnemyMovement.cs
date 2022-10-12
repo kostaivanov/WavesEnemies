@@ -448,14 +448,14 @@ internal class EnemyMovement : MonoBehaviour
         //this.transform.Rotate(0, 0, angle * Mathf.Rad2Deg * clockWise);
     }
     private void ProgressTracker()
-    {       
-        if (Vector3.Distance(tracker.transform.position, this.gameObject.transform.position) > 1f)
+    {
+        if (Vector3.Distance(tracker.transform.position, this.gameObject.transform.position) > 0.8f)
         {
             //float dis = Vector3.Distance(tracker.transform.position, startObject.transform.position);
             return;
         }
 
-        if (currentWP > 0 && Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 1f)
+        if (currentWP > 0 && Vector3.Distance(tracker.transform.position, waypoints[currentWP].transform.position) < 0.05f)
         {
             currentWP--;
         }
@@ -466,10 +466,8 @@ internal class EnemyMovement : MonoBehaviour
             f_Pushed = false;
             //currentWP = waypoints.Count - 1;
         }
-
-        tracker.transform.LookAt(waypoints[currentWP].transform, Vector3.up);
+        tracker.transform.LookAt(waypoints[currentWP].transform);
         tracker.transform.Translate(0, 0, (speed + 0.5f) * Time.deltaTime);
-            
     }
 
     // Update is called once per frame
