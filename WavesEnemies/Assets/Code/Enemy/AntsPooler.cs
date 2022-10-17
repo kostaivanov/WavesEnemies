@@ -9,6 +9,7 @@ public class AntsPooler : MonoBehaviour
     [SerializeField] private int pooledAmount;
     [SerializeField] private bool willGrow;
     internal List<GameObject> pooledObjects;
+    [SerializeField] private GameObject targetObject;
     //[SerializeField] internal GameObject parentInstantiateObject;
 
     private void Awake()
@@ -34,6 +35,13 @@ public class AntsPooler : MonoBehaviour
 
             obj_1.transform.position = this.gameObject.transform.position;
             //obj_1.transform.rotation = this.gameObject.transform.rotation;
+
+            Debug.Log(obj_1.transform.rotation);
+
+            Vector3 direction = (targetObject.transform.position - obj_1.gameObject.transform.position);
+            Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * direction;
+            Quaternion targetRotation = Quaternion.LookRotation(forward: Vector3.forward, upwards: rotatedVectorToTarget);
+            obj_1.transform.rotation = targetRotation;
 
             obj_1.name = obj_1.name + obj_1.transform.GetSiblingIndex();
             obj_1.SetActive(false);
