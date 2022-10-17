@@ -57,7 +57,7 @@ public class AntsPooler : MonoBehaviour
         {
             string[] prefabsFullName = pooledObjects[i].name.Split(new char[] { '(', ')' }, System.StringSplitOptions.RemoveEmptyEntries);
             string name = prefabsFullName[0];
-            Debug.Log(this.gameObject.name + " = name = " + pooledObjects.Count);
+            //Debug.Log(this.gameObject.name + " = name = " + pooledObjects.Count);
             if (name == typeObject && !pooledObjects[i].activeInHierarchy)
             {
                 Debug.Log("how many");

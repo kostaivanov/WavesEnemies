@@ -35,7 +35,7 @@ internal class EnemyMovement : MonoBehaviour
     //[SerializeField] protected Rigidbody2D rigidBody;
     [SerializeField] private float speed;
 
-    private List<GameObject> waypoints;
+    internal List<GameObject> waypoints;
     int currentWP;
     //public float speedTracker = 1f;
     [SerializeField] private float rotationSpeed = 2f;
@@ -540,7 +540,7 @@ internal class EnemyMovement : MonoBehaviour
         }
 
 
-
+        Debug.Log("waypoints = " + waypoints.Count);
     }
     private void FixedUpdate()
     {

@@ -334,7 +334,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectsToBePooled:
   - {fileID: 3934560469314609648, guid: eee376fd759235c4087e439ee931a1a5, type: 3}
-  pooledAmount: 2
+  pooledAmount: 1
   willGrow: 0
   targetObject: {fileID: 2107381006}
 --- !u!4 &49759511
@@ -1526,7 +1526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectsToBePooled:
   - {fileID: 3934560469314609648, guid: eee376fd759235c4087e439ee931a1a5, type: 3}
-  pooledAmount: 2
+  pooledAmount: 1
   willGrow: 0
   targetObject: {fileID: 2107381006}
 --- !u!4 &1103619580
@@ -1748,7 +1748,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1527337816
 MonoBehaviour:
   m_ObjectHideFlags: 0
