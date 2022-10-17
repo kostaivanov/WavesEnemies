@@ -51,6 +51,7 @@ internal class PlayerMovement : PlayerComponents
     {
         this.AnimationStateSwitch();
         base.animator.SetInteger("state", (int)state);
+        Debug.Log(state.ToString());
         //Animate();
     }
 
