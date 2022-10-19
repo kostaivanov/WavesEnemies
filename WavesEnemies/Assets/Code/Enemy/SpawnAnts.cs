@@ -7,7 +7,7 @@ public class SpawnAnts : MonoBehaviour
     [SerializeField] internal float addToSpawnTime;
     internal float chanceSpawnRare = 0.5f;
     private float initialTimer;
-    //private GameObject inGame;
+    [SerializeField] private GameObject targetObject;
 
     private string[] antsNames = new string[] { "EnemyAnt" };
 
@@ -56,8 +56,14 @@ public class SpawnAnts : MonoBehaviour
             return;
         }
         Debug.Log("obj  == null ");
-        //obj.transform.SetParent(this.gameObject.transform);
-        //obj.transform.localPosition = this.transform.position;
+        obj.transform.SetParent(this.gameObject.transform);
+        obj.transform.position = this.transform.position;
+
+        Vector3 direction = (targetObject.transform.position - obj.gameObject.transform.position);
+        Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * direction;
+        Quaternion targetRotation = Quaternion.LookRotation(forward: Vector3.forward, upwards: rotatedVectorToTarget);
+        obj.transform.rotation = targetRotation;
+
         //obj.transform.localRotation = this.transform.rotation;
         obj.SetActive(true);
     }

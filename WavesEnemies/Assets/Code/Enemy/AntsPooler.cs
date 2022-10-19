@@ -20,8 +20,8 @@ public class AntsPooler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         pooledObjects = new List<GameObject>();
+
         for (int i = 0; i < pooledAmount; i++)
         {
             //GameObject obj = Instantiate(pooledObjectsArray[Random.Range(0, pooledObjectsArray.Count)]);
