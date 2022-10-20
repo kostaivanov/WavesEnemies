@@ -90,7 +90,7 @@ internal class EnemyMovement : MonoBehaviour
         //tracker.GetComponent<MeshRenderer>().enabled = false;
         tracker.transform.position = this.gameObject.transform.position;
         tracker.transform.rotation = this.gameObject.transform.rotation;
-        tracker.name = tracker.name+ this.gameObject.transform.GetSiblingIndex();
+        tracker.name = tracker.name + this.gameObject.transform.GetSiblingIndex();
         f_Pushed = false;
         GameObject.FindGameObjectsWithTag("Ground").ToList().ForEach(o => mapGround.Add(o.GetComponent<Collider2D>()));
         placePlatformButtons = new List<PlacePlatformHandler>();
@@ -109,6 +109,10 @@ internal class EnemyMovement : MonoBehaviour
         if (!done)
         {
             searching = true;
+        }
+        if (tracker != null)
+        {
+            tracker.transform.position = this.transform.position;
         }
     }
 
