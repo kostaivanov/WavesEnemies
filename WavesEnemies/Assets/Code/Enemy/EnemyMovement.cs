@@ -104,7 +104,7 @@ internal class EnemyMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        BeginSearch();
+        BeginSearch(end);
 
         if (!done)
         {
@@ -144,7 +144,7 @@ internal class EnemyMovement : MonoBehaviour
             Destroy(marker.gameObject);
         }
     }
-    private void BeginSearch()
+    private void BeginSearch(GameObject goalObject)
     {
         done = false;
         startMarkerToClosed = false;
@@ -166,9 +166,9 @@ internal class EnemyMovement : MonoBehaviour
         startNode = new PathMarker(new LocationOnTheMap(this.gameObject.transform.position.x, this.gameObject.transform.position.y), 0, 0, 0,
             this.gameObject, null);
 
-        Vector3 goalLocation = new Vector3(end.transform.position.x, end.transform.position.y, 0);
-        goalNode = new PathMarker(new LocationOnTheMap(end.transform.position.x, end.transform.position.y), 0, 0, 0,
-            end, null);
+        Vector3 goalLocation = new Vector3(goalObject.transform.position.x, goalObject.transform.position.y, 0);
+        goalNode = new PathMarker(new LocationOnTheMap(goalObject.transform.position.x, goalObject.transform.position.y), 0, 0, 0,
+            goalObject, null);
 
         //Vector3 startLocation = new Vector3(startObject.transform.position.x, startObject.transform.position.y, 0);
         //startNode = new PathMarker(new LocationOnTheMap(startObject.transform.position.x, startObject.transform.position.y), 0, 0, 0,
@@ -451,7 +451,7 @@ internal class EnemyMovement : MonoBehaviour
 
         //this.transform.Rotate(0, 0, angle * Mathf.Rad2Deg * clockWise);
     }
-    private void ProgressTracker()
+    private void ProgressTracker(GameObject goalObject)
     {
         if (Vector3.Distance(tracker.transform.position, this.gameObject.transform.position) > 0.8f)
         {
@@ -464,7 +464,7 @@ internal class EnemyMovement : MonoBehaviour
             currentWP--;
         }
 
-        if (currentWP == 0 && Vector3.Distance(tracker.transform.position, end.transform.position) < 0.35f)
+        if (currentWP == 0 && Vector3.Distance(tracker.transform.position, goalObject.transform.position) < 0.35f)
         {
             done = false;
             f_Pushed = false;
@@ -515,7 +515,7 @@ internal class EnemyMovement : MonoBehaviour
             //start.transform.Translate(start.transform.up * autoSpeed, Space.World);
             if (tracker != null)
             {
-                ProgressTracker();
+                ProgressTracker(end);
             }
             // Debug.Log("bbbb ?");
             // Vector3 myLocation = this.gameObject.transform.position;
@@ -562,14 +562,14 @@ internal class EnemyMovement : MonoBehaviour
 
     }
 
-    private void Re_Search()
+    internal void Re_Search()
     {
         maze.MarkTheGround();
         f_Pushed = false;
         done = true;
         searching = false;
 
-        BeginSearch();
+        BeginSearch(end);
 
         if (!done)
         {
