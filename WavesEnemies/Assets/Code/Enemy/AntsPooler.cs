@@ -36,7 +36,7 @@ public class AntsPooler : MonoBehaviour
             obj_1.transform.position = this.gameObject.transform.position;
             //obj_1.transform.rotation = this.gameObject.transform.rotation;
 
-            Debug.Log(obj_1.transform.rotation);
+            //Debug.Log(obj_1.transform.rotation);
 
             Vector3 direction = (targetObject.transform.position - obj_1.gameObject.transform.position);
             Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * direction;

@@ -16,6 +16,12 @@ public class EnemyFindingZone : MonoBehaviour
     {
         if (otherObject.tag == "Player")
         {
+            foreach (GameObject obj in enemy.waypoints)
+            {
+                Destroy(obj);
+            }
+            enemy.waypoints.Clear();
+            Debug.Log("how?");
             enemy.Re_Search();
         }
     }

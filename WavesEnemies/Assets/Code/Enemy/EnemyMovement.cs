@@ -187,7 +187,7 @@ internal class EnemyMovement : MonoBehaviour
 
     }
 
-    private void Search(PathMarker thisNode)
+    private void Search(PathMarker thisNode, GameObject goalObject)
     {
         //if (thisNode.Equals(goalNode))
         //{
@@ -196,7 +196,7 @@ internal class EnemyMovement : MonoBehaviour
         //}
 
         ///float unityDistance = Vector3.Distance(thisNode.location.ToVector(), goalObject.transform.position);
-        float unityDistance = Vector3.Distance(thisNode.location.ToVector(), end.transform.position);
+        float unityDistance = Vector3.Distance(thisNode.location.ToVector(), goalObject.transform.position);
         //Debug.Log("distance kva e we = " + unityDistance);
         if (unityDistance < 1f)
         {
@@ -483,7 +483,7 @@ internal class EnemyMovement : MonoBehaviour
             {
                 if (p.searchPathAgain == true)
                 {
-                    Re_Search();
+                    Re_Search(end);
                     p.searchPathAgain = false;
                 }
             }
@@ -491,7 +491,8 @@ internal class EnemyMovement : MonoBehaviour
 
         if (searching == true)
         {
-            Search(lastPosition);
+            Search(lastPosition, end);
+            Debug.Log("how many times played?");
         }
 
         if (done == true)
@@ -555,21 +556,21 @@ internal class EnemyMovement : MonoBehaviour
         //}
         if (hit.collider != null && !mapGround.Contains(hit.collider))
         {
-            Re_Search();
+            Re_Search(end);
             mapGround.Add(hit.collider);
 
         }
 
     }
 
-    internal void Re_Search()
+    internal void Re_Search(GameObject goalObject)
     {
         maze.MarkTheGround();
         f_Pushed = false;
         done = true;
         searching = false;
 
-        BeginSearch(end);
+        BeginSearch(goalObject);
 
         if (!done)
         {
