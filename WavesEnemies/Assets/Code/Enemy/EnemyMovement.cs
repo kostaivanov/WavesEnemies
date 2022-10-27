@@ -569,12 +569,13 @@ internal class EnemyMovement : MonoBehaviour
         f_Pushed = false;
         done = true;
         searching = false;
-
         BeginSearch(goalObject);
 
         if (!done)
         {
             searching = true;
+            end = goalObject;
+            Debug.Log("123asdsdwe");
         }
     }
 

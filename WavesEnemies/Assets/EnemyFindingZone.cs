@@ -22,7 +22,7 @@ public class EnemyFindingZone : MonoBehaviour
             }
             enemy.waypoints.Clear();
             Debug.Log("how?");
-            enemy.Re_Search();
+            enemy.Re_Search(otherObject.gameObject);
         }
     }
 }
