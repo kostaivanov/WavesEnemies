@@ -491,8 +491,11 @@ internal class EnemyMovement : MonoBehaviour
 
         if (searching == true)
         {
-            Search(lastPosition, end);
-            Debug.Log("how many times played?");
+            if (end != null)
+            {
+                Search(lastPosition, end);
+                Debug.Log("how many times played?");
+            }
         }
 
         if (done == true)
@@ -545,7 +548,7 @@ internal class EnemyMovement : MonoBehaviour
         }
 
 
-        Debug.Log("waypoints = " + waypoints.Count);
+        //Debug.Log("waypoints = " + waypoints.Count);
     }
     private void FixedUpdate()
     {
