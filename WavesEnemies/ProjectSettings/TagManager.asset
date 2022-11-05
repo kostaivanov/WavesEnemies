@@ -13,6 +13,7 @@ TagManager:
   - Ground
   - PlacePlatform
   - Bullet
+  - Canvas
   layers:
   - Default
   - TransparentFX
