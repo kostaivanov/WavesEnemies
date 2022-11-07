@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 internal class PlayerMovement : PlayerComponents
 {
@@ -24,27 +25,33 @@ internal class PlayerMovement : PlayerComponents
     float move_X;
     float move_Y;
 
+    PhotonView view;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        view = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
     private void Update()
-    {     
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+    {
+        if (view.IsMine)
         {
-            ProcessInput();
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+            {
+                ProcessInput();
+            }
+            else
+            {
+                move_X = 0;
+                move_Y = 0;
+                Animate(lastMoveDirection);
+                rigidBody.velocity = Vector2.zero;
+            }
+            //Debug.Log(lastMoveDirection);
         }
-        else
-        {
-            move_X = 0;
-            move_Y = 0;
-            Animate(lastMoveDirection);
-            rigidBody.velocity = Vector2.zero;
-        }
-        //Debug.Log(lastMoveDirection);
     }
 
     private void LateUpdate()
