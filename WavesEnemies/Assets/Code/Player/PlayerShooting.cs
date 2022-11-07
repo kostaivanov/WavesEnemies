@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-internal class PlayerShooting : MonoBehaviour
+internal class PlayerShooting : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private Transform firePoint, targetPoint;
@@ -28,7 +29,7 @@ internal class PlayerShooting : MonoBehaviour
 
     private void Shoot()
     {
-        GameObject bullet =  Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(firePoint.up * bulletForce, ForceMode2D.Impulse);
         //Vector3 targetV3 = targetPoint.transform.position;

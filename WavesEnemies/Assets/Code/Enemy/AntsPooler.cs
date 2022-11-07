@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class AntsPooler : MonoBehaviour
+public class AntsPooler : MonoBehaviourPunCallbacks
 {
     internal static AntsPooler current;
     [SerializeField] internal List<GameObject> objectsToBePooled;
@@ -25,7 +26,7 @@ public class AntsPooler : MonoBehaviour
         for (int i = 0; i < pooledAmount; i++)
         {
             //GameObject obj = Instantiate(pooledObjectsArray[Random.Range(0, pooledObjectsArray.Count)]);
-            GameObject obj_1 = Instantiate(objectsToBePooled[0]);
+            GameObject obj_1 = PhotonNetwork.Instantiate(objectsToBePooled[0].name, this.gameObject.transform.position, Quaternion.identity);
             //obj_1.transform.parent = parentInstantiateObject.transform;
             //obj_1.transform.position = parentInstantiateObject.transform.position;
             //obj_1.transform.rotation = parentInstantiateObject.transform.rotation;

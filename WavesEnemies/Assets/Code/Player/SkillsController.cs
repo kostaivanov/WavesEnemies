@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Photon.Pun;
 
-public class SkillsController : MonoBehaviour
+public class SkillsController : MonoBehaviourPunCallbacks
 {
     internal List<PlacePlatformHandler> placePlatformButtons;
     [SerializeField] private List<GameObject> platformPrefab;
@@ -42,7 +43,7 @@ public class SkillsController : MonoBehaviour
                         //  if (otherColliders.Length == 0)
                         if (collide == false)
                         {
-                            GameObject platform = Instantiate(platformPrefab[0], this.transform.position, Quaternion.identity);
+                            GameObject platform = PhotonNetwork.Instantiate(platformPrefab[0].name, this.transform.position, Quaternion.identity);
                         }
                     }
                     else
@@ -54,7 +55,7 @@ public class SkillsController : MonoBehaviour
 
                         if (collide == false)
                         {
-                            GameObject platform = Instantiate(platformPrefab[1], this.transform.position, Quaternion.identity);
+                            GameObject platform = PhotonNetwork.Instantiate(platformPrefab[1].name, this.transform.position, Quaternion.identity);
                         }
                     }
 
