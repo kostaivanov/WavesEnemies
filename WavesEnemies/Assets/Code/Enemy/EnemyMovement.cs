@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Photon.Pun;
 
-internal class EnemyMovement : MonoBehaviour
+internal class EnemyMovement : MonoBehaviourPunCallbacks
 {
     private Maze maze;
     [SerializeField] private Material closedMaterial;
@@ -270,7 +271,7 @@ internal class EnemyMovement : MonoBehaviour
                 //GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), transform.rotation * Quaternion.Euler(0f, 0f, 0f));
                 if (hitColliders.Length == 0)
                 {
-                    GameObject pathBlock = Instantiate(PathParent, new Vector3(neighbour.x, neighbour.y, 0), Quaternion.identity);
+                    GameObject pathBlock = PhotonNetwork.Instantiate(PathParent.name, new Vector3(neighbour.x, neighbour.y, 0), Quaternion.identity);
 
                     TextMesh[] values = pathBlock.GetComponentsInChildren<TextMesh>();
                     values[0].text = "G: " + G.ToString("0.0");
@@ -399,7 +400,7 @@ internal class EnemyMovement : MonoBehaviour
         PathMarker begin = lastPosition;
         while (!startNode.Equals(begin) && begin != null)
         {
-            GameObject pathObject = Instantiate(emptyBlock, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
+            GameObject pathObject = PhotonNetwork.Instantiate(emptyBlock.name, new Vector3(begin.location.x, begin.location.y, 0), transform.rotation * Quaternion.Euler(90f, 0, 0f));
 
             pathObject.transform.parent = pathObjectsParent.gameObject.transform;
             begin = begin.parent;
@@ -477,6 +478,8 @@ internal class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        Debug.Log("currentWP - " + currentWP + " = this game object = " + this.gameObject.name);
         if (placePlatformButtons != null)
         {
             foreach (PlacePlatformHandler p in placePlatformButtons)
@@ -512,7 +515,7 @@ internal class EnemyMovement : MonoBehaviour
         //    f_Pushed = true;
         //}
 
-        if (this.gameObject != null && f_Pushed == true && waypoints.Count > 0)
+        if (f_Pushed == true && waypoints.Count > 0)
         {
 
             //CalculateAngle();

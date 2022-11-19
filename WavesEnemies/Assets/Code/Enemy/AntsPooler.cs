@@ -22,7 +22,10 @@ public class AntsPooler : MonoBehaviourPunCallbacks
     void Start()
     {
         pooledObjects = new List<GameObject>();
+    }
 
+    public override void OnJoinedRoom()
+    {
         for (int i = 0; i < pooledAmount; i++)
         {
             //GameObject obj = Instantiate(pooledObjectsArray[Random.Range(0, pooledObjectsArray.Count)]);
@@ -49,7 +52,6 @@ public class AntsPooler : MonoBehaviourPunCallbacks
 
             pooledObjects.Add(obj_1);
         }
-
     }
 
     internal GameObject GetPooledObject(string typeObject)
@@ -74,7 +76,8 @@ public class AntsPooler : MonoBehaviourPunCallbacks
             {
                 if (typeObject == objectsToBePooled[i].name)
                 {
-                    GameObject obj = Instantiate(objectsToBePooled[i]);
+                    GameObject obj = PhotonNetwork.Instantiate(objectsToBePooled[i].name, this.gameObject.transform.position, Quaternion.identity);
+                    //GameObject obj = Instantiate(objectsToBePooled[i]);
                     obj.transform.parent = this.gameObject.transform;
                     pooledObjects.Add(obj);
                     return obj;
