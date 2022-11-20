@@ -10,18 +10,19 @@ internal class PlayerShooting : MonoBehaviourPunCallbacks
     private Transform firePoint, targetPoint;
     [SerializeField]
     private GameObject bulletPrefab;
+    private PhotonView photonView;
 
     private float bulletForce = 20f;
     // Start is called before the first frame update
     void Start()
     {
-        
+        photonView = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire2"))
+        if (photonView.IsMine && Input.GetButtonDown("Fire2"))
         {
             Shoot();
         }

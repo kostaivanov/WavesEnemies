@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class SpawnPlayers : MonoBehaviour
+public class SpawnPlayers : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject playerPrefab;
 
@@ -12,16 +12,9 @@ public class SpawnPlayers : MonoBehaviour
     [SerializeField] private float minY;
     [SerializeField] private float maxY;
 
-    // Start is called before the first frame update
-    void Start()
+    public override void OnJoinedRoom()
     {
         Vector2 randomPosition = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
         GameObject myPlayer = (GameObject)PhotonNetwork.Instantiate(playerPrefab.name, randomPosition, Quaternion.identity, 0);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
